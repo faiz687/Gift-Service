@@ -64,7 +64,6 @@ p, legend {
 }
 
 main {
-	width: 100%;
 	margin-left: 3vw;
 	/* background-color: pink; */
 }
@@ -226,4 +225,13 @@ td {
 td:last-child {
 	width: 10vw;
 	text-align: right;
+}
+
+/* Home Page */
+.CreateEventLink{
+	float: right;
+  margin: 1em;
+}
+.CreateEventLink a{
+	text-decoration: none;
 }
