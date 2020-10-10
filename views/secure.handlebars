@@ -1,23 +1,57 @@
-
-<!doctype html>
-
+<!doctype html><!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Home Page</title>
-		<meta name="description" content="form to add new books">
-		<meta name="author" content="Mark Tyers">
-		<link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
-	</head>
-	<body>
-		<header>
-		<h1>Events Page</h1>
-		<a href="/logout">Log out</a>
-		</header>
-		{{#if msg}}
- 			<p class="msg">{{msg}}</p>
-		{{/if}}
-		<main>
-		</main>
-	</body>
+   <head>
+      <meta charset="utf-8">
+      <title>Home Page</title>
+      <meta name="description" content="form to add new books">
+      <meta name="author" content="Mark Tyers">
+		  <script src="https://kit.fontawesome.com/1dca77ecd5.js"></script>
+      <link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
+   </head>
+   <body>
+      <header>
+         <h1>Events Page</h1>
+         <a href="/logout">Log out</a>
+      </header>
+      {{#if msg}}
+      <p class="msg">{{msg}}</p>
+      {{/if}}
+      <main>
+         <section class="EventsSection" >
+            <form action="/Events" method="post" enctype="multipart/form-data">
+               <p>
+                  <label for="EventTitle">Event Title</label><br />
+                  <input type="text" name="EventTitle" placeholder="Event title" value="{{body.EventTitle}}" autofocus>
+               </p>
+               <p>
+                  <label for="EventsDescription">Describe Event</label>
+                  <textarea style="display: block;" id="EventsDescription" placeholder="Describe your event here..." name="EventsDescription" rows="4" cols="50" value="{{body.EventsDescription}}"></textarea>
+               </p>
+               <p>
+                  <label for="EventDate">Event Date</label>
+                  <input type="date" id="EventDate" name="EventDate">			
+               </p>
+               <p>
+                  <label for="EventImage">Add Event Image</label>
+                  <input type="file" id="EventImage" name="EventImage">		
+               </p>
+               <section  class="EventItemsSection">
+								 <div class="EventItemsDiv">
+									 <label style="font-size: x-large;margin-bottom: 10px;">Add Items for Event</label>
+								 </div>								 
+                  <div class="IndividualItemDiv">
+                     <input type="text"  placeholder="Enter Item Name..." />
+										 <input type="text"  placeholder="Enter Item Price..." />
+                     <input type="text"  placeholder="Enter Item Link..." />
+										 <div class=AddAndRemoveButtonDiv>
+										  <button type="button" onclick="AddAnotherAnswerChoice(this)" class="AddAndRemoveButton"><i class="fas fa-plus-circle"></i></button>
+                     <button type="button" onclick="RemoveAnswerChoice(this)" class="AddAndRemoveButton"><i class="fas fa-minus"></i></button>	 
+										</div>
+                  </div>
+               </section>
+               <p><input type="submit" value="Create event"></p>
+            </form>
+         </section>
+      </main>
+   </body>
 </html>

@@ -64,6 +64,7 @@ p, legend {
 }
 
 main {
+	margin-top: 2vw;
 	margin-left: 3vw;
 	/* background-color: pink; */
 }
@@ -135,7 +136,8 @@ legend {
 }
 
 input[type="file"] {
-	display: none;
+	display: block;
+	margin-top: 10px;
 }
 
 input[type="submit"], header > a, .custom-file-upload {
@@ -155,7 +157,9 @@ input[type="submit"]:hover, header > a:hover, .custom-file-upload:hover {
   background-color: white;
 }
 
-input[type="text"], input[type="email"], input[type="password"], textarea, select {
+input[type="text"], input[type="email"], input[type="password"]  , input[type="date"] , textarea, select   {
+	display: block;
+	margin-top: 10px;
 	font-size: 1.5vw;
 	width: 25vw;
 	border: 1px solid #CCC;
@@ -235,3 +239,50 @@ td:last-child {
 .CreateEventLink a{
 	text-decoration: none;
 }
+
+
+/* Events page */
+.EeventsLabel{
+	Margin
+}
+.EventsSection{
+	padding: 20px;
+  margin: auto;
+  width: 50%;
+  border: 10px solid #808080;
+}
+
+.EventItemsSection{
+	all: unset;
+  display: block;
+	padding-top: 10px;
+	border-top: 5px solid #808080;
+}
+
+.EventItemsDiv{
+	text-align:center;
+}
+
+.IndividualItemDiv{
+	  border-radius: 10px;
+    width: fit-content;
+    border: 5px solid #808080;
+    padding: 10px;
+	  margin: 10px 0px;
+}
+
+.AddAndRemoveButtonDiv{
+	text-align: center;
+   padding-top: 10px;
+}
+.AddAndRemoveButton{
+	  width: 3em;
+    height: 2em;	
+}
+
+
+
+
+
+
+
