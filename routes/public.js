@@ -1,5 +1,6 @@
 import Router from 'koa-router'
 import bodyParser from 'koa-body'
+import session from 'koa-session'
 
 const publicRouter = new Router()
 publicRouter.use(bodyParser({multipart: true}))
@@ -82,7 +83,8 @@ publicRouter.post('/login', async ctx => {
 	ctx.hbs.body = ctx.request.body
 	try {
 		const body = ctx.request.body
-		await account.login(body.user, body.pass)
+		let UserId = await account.login(body.user, body.pass)
+		ctx.session.UserId = UserId
 		ctx.session.authorised = true
 		const referrer = body.referrer || '/'
 		return ctx.redirect(`${referrer}?msg=you are now logged in...`)

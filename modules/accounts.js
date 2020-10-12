@@ -50,15 +50,39 @@ class Accounts {
 		let sql = `SELECT count(UserId) AS count FROM UsersTbl WHERE UserName="${username}";`
 		const records = await this.db.get(sql)
 		if(!records.count) throw new Error(`username "${username}" not found`)
-		sql = `SELECT UserPassword FROM UsersTbl WHERE UserName = "${username}";`
+		sql = `SELECT UserPassword , UserId  FROM UsersTbl WHERE UserName = "${username}";`
 		const record = await this.db.get(sql)
 		const valid = await bcrypt.compare(password, record.UserPassword)
 		if(valid === false) throw new Error(`invalid password for account "${username}"`)
-		return true
+		return record.UserId
 	}
 
 	async close() {
 		await this.db.close()
+	}
+	
+	
+	async RegisterEvent( EventTitle , EventsDescription  , EventDate , UserId , EventImagePath ) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		let sql = `SELECT count(EventTitle) AS count FROM EventsTbl WHERE EventTitle="${EventTitle}";`
+		const records = await this.db.get(sql)
+		if(records.count !== 0) throw new Error("Event Already Exists")
+		sql = `INSERT INTO EventsTbl (EventTitle , EventsDescription ,  EventDate , EventImage ,UserId) VALUES ("${EventTitle}",	"${EventsDescription}" , "${EventDate}" ,  "${EventImagePath}"  , "${UserId}");`
+		await this.db.get(sql)
+	  sql = `select last_insert_rowid() AS EventId;`
+		const data = await this.db.get(sql)
+		return data.EventId
+	}
+		
+	async AddItem( ItemName , ItemPrice  , ItemLink , EventId ) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+	  let sql = `INSERT INTO ItemsTbl ( ItemName, ItemPrice,  ItemLink, EventId  ) VALUES ("${ItemName}",	"${ItemPrice}" ,"${ItemLink}","${EventId}");`
+		await this.db.get(sql)
+		return true
 	}
 }
 
