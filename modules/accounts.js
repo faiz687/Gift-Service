@@ -5,6 +5,7 @@ import sqlite from 'sqlite-async'
 const saltRounds = 10
 
 class Accounts {
+	
 	constructor(dbName = 'GiftListService.db') {
 		return (async() => {
 			this.db = await sqlite.open(dbName)

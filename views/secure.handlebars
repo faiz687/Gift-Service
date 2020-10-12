@@ -6,6 +6,7 @@
       <meta name="description" content="form to add new books">
       <meta name="author" content="Mark Tyers">
 		  <script src="https://kit.fontawesome.com/1dca77ecd5.js"></script>
+		  <script src="{{host}}/JavaScript.js"></script>
       <link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
    </head>
    <body>
@@ -21,28 +22,28 @@
             <form action="/Events" method="post" enctype="multipart/form-data">
                <p>
                   <label for="EventTitle">Event Title</label><br />
-                  <input type="text" name="EventTitle" placeholder="Event title" value="{{body.EventTitle}}" autofocus>
+                  <input type="text" name="EventTitle" placeholder="Event title" autofocus required>
                </p>
                <p>
                   <label for="EventsDescription">Describe Event</label>
-                  <textarea style="display: block;" id="EventsDescription" placeholder="Describe your event here..." name="EventsDescription" rows="4" cols="50" value="{{body.EventsDescription}}"></textarea>
+                  <textarea style="display: block;"  placeholder="Describe your event here..." name="EventsDescription" rows="4" cols="50" required></textarea>
                </p>
                <p>
                   <label for="EventDate">Event Date</label>
-                  <input type="date" id="EventDate" name="EventDate">			
+                  <input type="date"  name="EventDate" accept="image/x-png,image/gif,image/jpeg" required>			
                </p>
                <p>
                   <label for="EventImage">Add Event Image</label>
-                  <input type="file" id="EventImage" name="EventImage">		
+                  <input type="file" name="EventImage" required>		
                </p>
                <section  class="EventItemsSection">
 								 <div class="EventItemsDiv">
 									 <label style="font-size: x-large;margin-bottom: 10px;">Add Items for Event</label>
 								 </div>								 
                   <div class="IndividualItemDiv">
-                     <input type="text"  placeholder="Enter Item Name..." />
-										 <input type="text"  placeholder="Enter Item Price..." />
-                     <input type="text"  placeholder="Enter Item Link..." />
+                     <input type="text" name="ItemName"  placeholder="Enter Item Name..." required/>
+										 <input type="text" name="ItemPrice"  placeholder="Enter Item Price..." required />
+                     <input type="text" name="ItemLink"  placeholder="Enter Item Link..." required/>
 										 <div class=AddAndRemoveButtonDiv>
 										  <button type="button" onclick="AddAnotherAnswerChoice(this)" class="AddAndRemoveButton"><i class="fas fa-plus-circle"></i></button>
                      <button type="button" onclick="RemoveAnswerChoice(this)" class="AddAndRemoveButton"><i class="fas fa-minus"></i></button>	 
