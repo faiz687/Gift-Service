@@ -6,6 +6,7 @@ import bodyParser from 'koa-body'
 
 import { apiRouter } from './routes/routes.js'
 
+
 const app = new Koa()
 app.keys = ['darkSecret']
 
@@ -25,7 +26,6 @@ app.use( async(ctx, next) => {
 	for(const key in ctx.query) ctx.hbs[key] = ctx.query[key]
 	await next()
 })
-
 
 app.use(apiRouter.routes(), apiRouter.allowedMethods())
 app.listen(port, async() => console.log(`listening on port ${port}`))

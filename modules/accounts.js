@@ -64,6 +64,7 @@ class Accounts {
 	
 	async RegisterEvent( EventTitle , EventsDescription  , EventDate , UserId , EventImagePath ) {
 		Array.from(arguments).forEach( val => {
+			console.log("event")
 			if(val.length === 0) throw new Error('missing field')
 		})
 		let sql = `SELECT count(EventTitle) AS count FROM EventsTbl WHERE EventTitle="${EventTitle}";`
