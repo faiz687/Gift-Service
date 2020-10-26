@@ -24,16 +24,17 @@ secureRouter.post('/', async ctx => {
 	try {		
 		const EventImageFile = ctx.request.files.EventImage
 		await fs.copy(EventImageFile.path, `EventImages/${EventImageFile.name}`)
-		let EventId = await account.RegisterEvent(ctx.request.body.EventTitle, ctx.request.body.EventsDescription, ctx.request.body.EventDate , ctx.session.UserId , `EventImages/${EventImageFile.name}`)
+		let EventId = await account.RegisterEvent(ctx.request.body.EventTitle, ctx.request.body.EventsDescription, ctx.request.body.EventDate , ctx.session.UserId , EventImageFile.name)
 		if (typeof ctx.request.body.ItemName === "string"){
 			await account.AddItem( ctx.request.body.ItemName, ctx.request.body.ItemPrice, ctx.request.body.ItemLink , EventId)
 		}
 		else{
-			console.log("list")
 			for (var index = 0; index < ctx.request.body.ItemName.length; index++) {
 				await account.AddItem( ctx.request.body.ItemName[index], ctx.request.body.ItemPrice[index], ctx.request.body.ItemLink[index] , EventId)			
 			}	
 		}
+		ctx.hbs.msg = 
+	  ctx.redirect('/');
 	}
 	catch(err) {
 		ctx.hbs.msg = err.message
@@ -42,6 +43,18 @@ secureRouter.post('/', async ctx => {
 		await ctx.render('register', ctx.hbs)
 	}
 })
+
+
+secureRouter.get('/SingleEvent/:id', async ctx => {
+	if(ctx.hbs.authorised !== true) return ctx.redirect('/login?msg=you need to log in&referrer=/Events/SingleEvent/'+ctx.params.id)
+  const account = await new Accounts(dbName)
+	let SingleEvent = account.GetAllDetailsOfEventbyEventId(ctx.params.id)
+	await ctx.render('SingleEvent', SingleEvent)
+
+})
+
+
+
 
 
 

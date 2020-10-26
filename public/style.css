@@ -64,8 +64,8 @@ p, legend {
 }
 
 main {
+	margin-left:2vw;
 	margin-top: 2vw;
-	margin-left: 3vw;
 	/* background-color: pink; */
 }
 
@@ -243,7 +243,7 @@ td:last-child {
 
 /* Events page */
 .EeventsLabel{
-	Margin
+	
 }
 .EventsSection{
 	padding: 20px;
@@ -291,6 +291,28 @@ section.AllEventsSection {
 	width:initial;
   background-color: #DDD;
 	
+}
+
+.EventsSectionWrapper{
+	all : unset;	
+}
+
+.SingleEvent{
+	  box-shadow: 1px 0px 46px 4px rgba(0,0,0,0.42);
+	  border-radius: 15px;
+	  padding: 10px;
+    border: 5px solid #6f6f6f;;
+	  text-align:center;
+	  width: 50%;
+    margin: auto;
+	  margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.SingleEventlabel{
+	display: block;
+	font-size: larger;
+  margin: 10px 0px;	
 }
 
 

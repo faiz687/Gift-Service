@@ -26,7 +26,17 @@
          <section class="AllEventsSection">
             <article>
                <h2 style="text-align:center;">All Events</h2>
-							 
+               <section class="EventsSectionWrapper">
+                  {{#each AllEvents}}
+                  <div class="SingleEvent">
+                     <a href="Events/SingleEvent/{{this.EventId}}">
+                     <label class="SingleEventlabel">{{this.EventTitle}}</label>
+                     <label class="SingleEventlabel">{{this.EventDate}}</label>
+                     <img style="width: 20em;margin:15px 0px;" src="{{this.EventImage}}">									  
+                     </a>
+                  </div>
+                  {{/each}}
+               </section>
             </article>
          </section>
       </main>

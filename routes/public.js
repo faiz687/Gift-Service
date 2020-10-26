@@ -16,10 +16,13 @@ const dbName = 'GiftListService.db'
  */
 publicRouter.get('/', async ctx => {
 	try {
+		const account = await new Accounts(dbName)
+		let AllEvents  = await account.GetAllEvents()
+		ctx.hbs.AllEvents =  AllEvents
 		await ctx.render('index', ctx.hbs)
 	} catch(err) {
 		await ctx.render('error', ctx.hbs)
-	}
+	}d
 })
 
 
@@ -87,7 +90,8 @@ publicRouter.post('/login', async ctx => {
 		ctx.session.UserId = UserId
 		ctx.session.authorised = true
 		const referrer = body.referrer || '/'
-		return ctx.redirect(`${referrer}?msg=you are now logged in...`)
+		console.log(body.referrer)
+		return ctx.redirect(`${referrer}?msg=you are now logged in here...`)
 	} catch(err) {
 		ctx.hbs.msg = err.message
 		await ctx.render('login', ctx.hbs)
@@ -100,5 +104,6 @@ publicRouter.get('/logout', async ctx => {
 	ctx.session.authorised = null
 	ctx.redirect('/?msg=you are now logged out')
 })
+
 
 export { publicRouter }

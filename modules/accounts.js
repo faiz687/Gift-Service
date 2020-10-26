@@ -64,7 +64,6 @@ class Accounts {
 	
 	async RegisterEvent( EventTitle , EventsDescription  , EventDate , UserId , EventImagePath ) {
 		Array.from(arguments).forEach( val => {
-			console.log("event")
 			if(val.length === 0) throw new Error('missing field')
 		})
 		let sql = `SELECT count(EventTitle) AS count FROM EventsTbl WHERE EventTitle="${EventTitle}";`
@@ -85,6 +84,20 @@ class Accounts {
 		await this.db.get(sql)
 		return true
 	}
+	
+		async GetAllEvents() {			
+			let sql = `Select  EventId  ,EventTitle , strftime( ' %d-%m-%Y ', EventDate) as EventDate, EventImage from EventsTbl;`
+			return await this.db.all(sql)			
+	}
+	
+		async GetAllDetailsOfEventbyEventId(EventId ) {
+			console.log(EventId)
+	}
+	
+	
+	
+	
+	
 }
 
 export { Accounts }
