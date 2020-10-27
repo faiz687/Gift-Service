@@ -22,7 +22,7 @@ publicRouter.get('/', async ctx => {
 		await ctx.render('index', ctx.hbs)
 	} catch(err) {
 		await ctx.render('error', ctx.hbs)
-	}d
+	}
 })
 
 

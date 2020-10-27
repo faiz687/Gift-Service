@@ -14,6 +14,7 @@ __diff_output__/
 trace/
 .node-persist/
 
+
 *snap.png
 *diff.png
 *trace.json

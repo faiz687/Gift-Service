@@ -90,13 +90,25 @@ class Accounts {
 			return await this.db.all(sql)			
 	}
 	
-		async GetAllDetailsOfEventbyEventId(EventId ) {
-			console.log(EventId)
+	
+		async GetEventbyEventId(EventId) {
+			let sql = `select EventId , EventTitle  , EventsDescription , strftime( ' %d-%m-%Y ', EventDate) as EventDate ,  EventImage  FROM EventsTbl WHERE EventId ="${EventId}";`
+			return await this.db.get(sql)				
+	}
+
+	
+		async GetItemsbyEventId(EventId) {
+			let sql = `select itemid , itemname , itemprice , itemlink from ItemsTbl where EventId = "${EventId}";`
+			return await this.db.all(sql)				
 	}
 	
-	
-	
-	
+			async ItemPledgedbyItemId(ItemId) {	
+				let result = false
+				let sql = `select ItemId , UserId from PledgeTbl where ItemId = "${ItemId}";`
+				let records = await this.db.get(sql)
+				if (records === undefined) return ""
+				return "checked"
+	}
 	
 }
 
