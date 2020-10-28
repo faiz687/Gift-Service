@@ -104,7 +104,7 @@ class Accounts {
 	
 			async ItemPledgedbyItemId(ItemId) {	
 				let result = false
-				let sql = `select ItemId , UserId from PledgeTbl where ItemId = "${ItemId}";`
+				let sql = `select ItemId ,  UserId from PledgeTbl where ItemId = "${ItemId}";`
 				let records = await this.db.get(sql)
 				if (records === undefined) return ""
 				return "checked"
