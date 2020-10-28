@@ -327,3 +327,20 @@ label {
     margin: 10px 0px;
     border-radius: 9px;	
 }
+
+.PledgeFormInput {
+	  font-size: larger !important;
+    padding: 10px !important;
+	
+}
+
+.PledgeSubmitButton {
+		background-color: #19b04e !important;
+		font-family: Verdana,sans-serif !important;
+		border-radius: 10px;
+		border: 2px solid white !important;	
+}
+
+
+
+

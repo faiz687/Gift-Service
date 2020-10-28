@@ -80,7 +80,7 @@ class Accounts {
 			if(val.length === 0) throw new Error('missing field')
 		})
 	  let sql = `INSERT INTO ItemsTbl ( ItemName, ItemPrice,  ItemLink, EventId  ) VALUES ("${ItemName}",	"${ItemPrice}" ,"${ItemLink}","${EventId}");`
-		await this.db.get(sql)
+		await this.db.run(sql)
 		return true
 	}
 	
@@ -97,17 +97,31 @@ class Accounts {
 
 	
 		async GetItemsbyEventId(EventId) {
-			let sql = `select itemid , itemname , itemprice , itemlink from ItemsTbl where EventId = "${EventId}";`
+			let sql = `select itemid , itemname , itemprice , EventId , itemlink from ItemsTbl where EventId = "${EventId}";`
 			return await this.db.all(sql)				
 	}
 	
-			async ItemPledgedbyItemId(ItemId) {	
-				let result = false
-				let sql = `select ItemId , UsersTbl.UserId , username from PledgeTbl INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = "${ItemId}";`
-				let record = await this.db.get(sql)
-				if (record === undefined) return null
-				return record
+		async ItemPledgedbyItemId(ItemId) {	
+			let result = false
+			let sql = `select ItemId , UsersTbl.UserId , username from PledgeTbl INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = "${ItemId}";`
+			let record = await this.db.get(sql)
+			if (record === undefined) return null
+			return record
 	}
+	
+			async PledgeItem(ItemId,UserId) {	
+				Array.from(arguments).forEach( val => {
+					if(val.length === 0) throw new Error('missing field')
+				})
+				let sql = `INSERT INTO PledgeTbl ( itemid , userid) VALUES (${ItemId}, ${UserId});`
+				await this.db.run(sql)		
+				return true
+	}
+	
+	
+	
+	
+	
 	
 }
 
