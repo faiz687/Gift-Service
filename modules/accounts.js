@@ -4,7 +4,6 @@ import sqlite from 'sqlite-async'
 const saltRounds = 10
 
 class Accounts {
-	
 	constructor(dbName = 'GiftListService.db') {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
@@ -12,10 +11,9 @@ class Accounts {
 			const sql = 'CREATE TABLE IF NOT EXISTS UsersTbl\
 				(UserId INTEGER PRIMARY KEY AUTOINCREMENT, UserName TEXT, UserPassword TEXT, UserEmail TEXT);'
 			await this.db.run(sql)
-			return this
+ 			return this
 		})()
 	}
-
 	/**
 	 * registers a new user
 	 * @param {String} user the chosen username
@@ -37,14 +35,12 @@ class Accounts {
 		await this.db.run(sql)
 		return true
 	}
-
 	/**
 	 * checks to see if a set of login credentials are valid
 	 * @param {String} username the username to check
 	 * @param {String} password the password to check
 	 * @returns {Boolean} returns true if credentials are valid
 	 */
-	
 	async login(username, password) {
 		let sql = `SELECT count(UserId) AS count FROM UsersTbl WHERE UserName="${username}";`
 		const records = await this.db.get(sql)
@@ -59,70 +55,57 @@ class Accounts {
 	async close() {
 		await this.db.close()
 	}
-	
-	
-	async RegisterEvent( EventTitle , EventsDescription  , EventDate , UserId , EventImagePath ) {
+	async RegisterEvent(EventTitle,EventsDescription,EventDate,UserId,EventImagePath ) {
 		Array.from(arguments).forEach( val => {
 			if(val.length === 0) throw new Error('missing field')
 		})
 		let sql = `SELECT count(EventTitle) AS count FROM EventsTbl WHERE EventTitle="${EventTitle}";`
 		const records = await this.db.get(sql)
-		if(records.count !== 0) throw new Error("Event Already Exists")
-		sql = `INSERT INTO EventsTbl (EventTitle , EventsDescription ,  EventDate , EventImage ,UserId) VALUES ("${EventTitle}",	"${EventsDescription}" , "${EventDate}" ,  "${EventImagePath}"  , "${UserId}");`
+		if(records.count !== 0) throw new Error('Event Already Exists')
+		sql = `INSERT INTO EventsTbl (EventTitle , EventsDescription ,  EventDate , EventImage , UserId) 
+    VALUES ('${EventTitle}',	'${EventsDescription}' , '${EventDate}' ,  '${EventImagePath}'  , '${UserId}');`
 		await this.db.get(sql)
-	  sql = `select last_insert_rowid() AS EventId;`
+		sql = 'select last_insert_rowid() AS EventId;'
 		const data = await this.db.get(sql)
 		return data.EventId
 	}
-		
-	async AddItem( ItemName , ItemPrice  , ItemLink , EventId ) {
+	async AddItem(ItemName,ItemPrice,ItemLink,EventId) {
 		Array.from(arguments).forEach( val => {
 			if(val.length === 0) throw new Error('missing field')
 		})
-	  let sql = `INSERT INTO ItemsTbl ( ItemName, ItemPrice,  ItemLink, EventId  ) VALUES ("${ItemName}",	"${ItemPrice}" ,"${ItemLink}","${EventId}");`
+	  const sql = `INSERT INTO ItemsTbl (ItemName,ItemPrice,ItemLink,EventId) VALUES 
+    ('${ItemName}','${ItemPrice}','${ItemLink}','${EventId}');`
 		await this.db.run(sql)
 		return true
 	}
-	
-		async GetAllEvents() {			
-			let sql = `Select  EventId  ,EventTitle , strftime( ' %d-%m-%Y ', EventDate) as EventDate, EventImage from EventsTbl;`
-			return await this.db.all(sql)			
+	async GetAllEvents() {
+		const sql = `Select  EventId,EventTitle,strftime(' %d-%m-%Y ',EventDate) 
+    as EventDate, EventImage from EventsTbl;`
+		return await this.db.all(sql)
 	}
-	
-	
-		async GetEventbyEventId(EventId) {
-			let sql = `select EventId , EventTitle  , EventsDescription , strftime( ' %d-%m-%Y ', EventDate) as EventDate ,  EventImage  FROM EventsTbl WHERE EventId ="${EventId}";`
-			return await this.db.get(sql)				
+	async GetEventbyEventId(EventId) {
+		const sql = `select EventId , EventTitle  , EventsDescription , strftime( ' %d-%m-%Y ', EventDate) as 
+    EventDate,EventImage  FROM EventsTbl WHERE EventId ='${EventId}';`
+		return await this.db.get(sql)
 	}
-
-	
-		async GetItemsbyEventId(EventId) {
-			let sql = `select itemid , itemname , itemprice , EventId , itemlink from ItemsTbl where EventId = "${EventId}";`
-			return await this.db.all(sql)				
+	async GetItemsbyEventId(EventId) {
+		const sql = `select itemid,itemname,itemprice,EventId,itemlink from ItemsTbl where EventId = '${EventId}';`
+		return await this.db.all(sql)
 	}
-	
-		async ItemPledgedbyItemId(ItemId) {	
-			let result = false
-			let sql = `select ItemId , UsersTbl.UserId , username from PledgeTbl INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = "${ItemId}";`
-			let record = await this.db.get(sql)
-			if (record === undefined) return null
-			return record
+	async ItemPledgedbyItemId(ItemId) {
+		const sql = `select ItemId,UsersTbl.UserId,username from PledgeTbl 
+    INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}';`
+		const record = await this.db.get(sql)
+		if (record === undefined) return null
+		return record
 	}
-	
-			async PledgeItem(ItemId,UserId) {	
-				Array.from(arguments).forEach( val => {
-					if(val.length === 0) throw new Error('missing field')
-				})
-				let sql = `INSERT INTO PledgeTbl ( itemid , userid) VALUES (${ItemId}, ${UserId});`
-				await this.db.run(sql)		
-				return true
+	async PledgeItem(ItemId,UserId) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		const sql = `INSERT INTO PledgeTbl (itemid,userid) VALUES (${ItemId}, ${UserId});`
+		await this.db.run(sql)
+		return true
 	}
-	
-	
-	
-	
-	
-	
 }
-
 export { Accounts }

@@ -6,6 +6,8 @@ const secureRouter = new Router({ prefix: '/Events' })
 
 import { Accounts } from '../modules/accounts.js'
 
+import { Email } from '../modules/Email.js'
+
 const dbName = 'GiftListService.db'
 
 secureRouter.get('/', async ctx => {
@@ -63,18 +65,21 @@ secureRouter.get('/SingleEvent/:id', async ctx => {
 secureRouter.post('/SingleEvent/:id', async ctx => {	
 	if(ctx.hbs.authorised !== true) return ctx.redirect('/login?msg=you need to log in&referrer=/Events/SingleEvent/'+ctx.params.id)
 	const account = await new Accounts(dbName)
-	await account.PledgeItem(ctx.params.id,ctx.session.UserId)
-	let EventData = await account.GetEventbyEventId(ctx.request.body.EventId)
-	let EventItems = await account.GetItemsbyEventId(ctx.request.body.EventId)
-	for (var i = 0; i < EventItems.length; i++) {
-		let ItemPledged  = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
-		if (ItemPledged){
-			EventItems[i].ItemPledged = ItemPledged
-		}
-	} 								
-	ctx.hbs.EventData = EventData
-	ctx.hbs.ItemData = EventItems
-	await ctx.render('SingleEvent',ctx.hbs)
+	const mail = await new Email()
+	console.log(mail)
+	
+// 	await account.PledgeItem(ctx.params.id,ctx.session.UserId)
+// 	let EventData = await account.GetEventbyEventId(ctx.request.body.EventId)
+// 	let EventItems = await account.GetItemsbyEventId(ctx.request.body.EventId)
+// 	for (var i = 0; i < EventItems.length; i++) {
+// 		let ItemPledged  = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
+// 		if (ItemPledged){
+// 			EventItems[i].ItemPledged = ItemPledged
+// 		}
+// 	} 								
+// 	ctx.hbs.EventData = EventData
+// 	ctx.hbs.ItemData = EventItems
+// 	await ctx.render('SingleEvent',ctx.hbs)
 })
 
 
