@@ -49,10 +49,12 @@ secureRouter.get('/SingleEvent/:id', async ctx => {
   const account = await new Accounts(dbName)
 	let EventData = await account.GetEventbyEventId(ctx.params.id)
 	let EventItems = await account.GetItemsbyEventId(ctx.params.id)
-	console.log(EventItems)
 	for (var i = 0; i < EventItems.length; i++) {
 		let ItemPledged  = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
-		EventItems[i].ItemPledged = ItemPledged
+		if (ItemPledged){
+			console.log(ItemPledged)
+			EventItems[i].ItemPledged = ItemPledged
+		}
 	} 								
 	ctx.hbs.EventData = EventData
 	ctx.hbs.ItemData = EventItems

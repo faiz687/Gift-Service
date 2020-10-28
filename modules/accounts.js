@@ -1,4 +1,3 @@
-
 import bcrypt from 'bcrypt-promise'
 import sqlite from 'sqlite-async'
 
@@ -104,10 +103,10 @@ class Accounts {
 	
 			async ItemPledgedbyItemId(ItemId) {	
 				let result = false
-				let sql = `select ItemId ,  UserId from PledgeTbl where ItemId = "${ItemId}";`
-				let records = await this.db.get(sql)
-				if (records === undefined) return ""
-				return "checked"
+				let sql = `select ItemId , UsersTbl.UserId , username from PledgeTbl INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = "${ItemId}";`
+				let record = await this.db.get(sql)
+				if (record === undefined) return null
+				return record
 	}
 	
 }
