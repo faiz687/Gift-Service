@@ -25,16 +25,22 @@
                   <label class="SingleEventlabel" >{{EventData.EventDate}}</label>
                   <img style="width: 40em;margin:15px 0px;" src="/{{EventData.EventImage}}">									  
                </div>
-               <div class="SingleEvent">
+               <div class="SingleEvent" >
+                  <p>Gifts</p>
                   {{#each ItemData}}
-								 <div class="ItemSectionWrapper">
-									<label class="SingleEventlabel">{{this.ItemName}}</label>
-                  <label class="SingleEventlabel">{{this.ItemPrice}}</label>
-                  <label class="SingleEventlabel">{{this.ItemLink}}</label>
-                  <input type="checkbox" name="ItemPledged"  {{this.ItemPledged}}>
-									 
-								 </div>
-
+                  <div class="ItemSectionWrapper" style="text-align: initial;">
+                     <label class="SingleEventlabel">Gift : {{this.ItemName}}</label>
+                     <label class="SingleEventlabel">Gift Price : {{this.ItemPrice}}</label>
+                     <a style="Display:block" href="{{this.ItemLink}}">Gift Link</a>
+                     {{#if ItemPledged}}
+                     <label style="color:green;" class="SingleEventlabel">This gift has already been pledged by <span>{{this.ItemPledged.UserName}}</span></label>
+                     {{else}}
+                     <div style="margin:10px 0px">
+                        <label for="PLedgeGift">PLedge Gift</label>
+                        <input style="margin-left:5px" type="checkbox" name="PLedgeGift">	
+                     </div>
+                     {{/if}}                   	
+                  </div>
                   {{/each}}
                </div>
             </section>
