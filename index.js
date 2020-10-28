@@ -24,7 +24,7 @@ app.use( async(ctx, next) => {
 		  authorised: ctx.session.authorised,
 			host: `https://${ctx.host}`
 	}
-	for(const key in ctx.query)
+	for(const key in ctx.query )
 		{
 		ctx.hbs[key] = ctx.query[key]
 		}
