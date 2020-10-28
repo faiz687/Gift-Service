@@ -13,3 +13,12 @@ function RemoveAnswerChoice(sender) {
         sender.parentElement.parentElement.remove();
     }
 }
+
+function ShowHideInput(sender) {
+	let PLedgeForm = sender.nextSibling.nextSibling;
+	if (PLedgeForm.style.display === "none") {
+		PLedgeForm.style.display = "block";
+  } else {
+    PLedgeForm.style.display = "none";
+  }	
+}

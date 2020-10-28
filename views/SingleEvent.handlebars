@@ -6,6 +6,7 @@
       <meta name="description" content="form to add new books">
       <meta name="author" content="Mark Tyers">
       <script src="https://kit.fontawesome.com/1dca77ecd5.js"></script>
+      <script src="{{host}}/JavaScript.js"></script>
       <link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
    </head>
    <body>
@@ -33,11 +34,15 @@
                      <label class="SingleEventlabel">Gift Price : {{this.ItemPrice}}</label>
                      <a style="Display:block" href="{{this.ItemLink}}">Gift Link</a>
                      {{#if ItemPledged}}
-                     <label style="color:green;" class="SingleEventlabel">This gift has already been pledged by <span>{{this.ItemPledged.UserName}}</span></label>
+                     <label style="color:green;" class="SingleEventlabel">This gift has been pledged by <span>{{this.ItemPledged.UserName}}</span></label>
                      {{else}}
-                     <div style="margin:10px 0px">
+                     <div style="margin:10px 0px ">
                         <label for="PLedgeGift">PLedge Gift</label>
-                        <input style="margin-left:5px" type="checkbox" name="PLedgeGift">	
+                        <input style="margin-left:5px ;" type="checkbox" name="PLedgeGift" onclick="ShowHideInput(this)">	
+                        <form  method="post" enctype="multipart/form-data" action="/Events/SingleEvent/{{this.ItemId}}" style="display:none ;">
+                           <input style="margin-top:10px ;" class="PledgeFormInput PledgeSubmitButton" type="submit" value="Pledge Gift">
+                           <input type="hidden" name="EventId" value="{{this.EventId}}"/>
+                        </form>
                      </div>
                      {{/if}}                   	
                   </div>
