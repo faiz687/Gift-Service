@@ -16,7 +16,7 @@ const port = process.env.PORT || defaultPort
 app.use(serve('EventImages'))
 app.use(serve('public'))
 app.use(session(app))
-app.use(views('views',  { extension: 'handlebars' }, {map: { handlebars: 'handlebars' }}))
+app.use(views('views', { extension: 'handlebars' }, {map: { handlebars: 'handlebars' }}))
 
 app.use( async(ctx, next) => {
 	  //console.log(`${ctx.method} ${ctx.path}`)
