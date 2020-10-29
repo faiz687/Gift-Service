@@ -69,11 +69,6 @@ secureRouter.post('/SingleEvent/:id', async ctx => {
 	await account.PledgeItem(ctx.params.id,ctx.session.UserId)
 	const EventOwnerInfo = await account.GetEventOwnerInfo(ctx.request.body.EventId)
 	mail.SendPledgeMailToOwner(ctx.params.id)
-	
-	
-	
-	
-	
 	let EventData = await account.GetEventbyEventId(c)
 	let EventItems = await account.GetItemsbyEventId(ctx.request.body.EventId)
 	for (var i = 0; i < EventItems.length; i++) {
