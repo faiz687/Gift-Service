@@ -107,5 +107,13 @@ class Accounts {
 		await this.db.run(sql)
 		return true
 	}
+		async GetEventOwnerInfo(EventId) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+    const sql = `select UsersTbl.userid , username , useremail from UsersTbl INNER JOIN EventsTbl
+                 on EventsTbl.userid = UsersTbl.userid where eventid = ${EventId} ;`		
+		return await this.db.get(sql)
+	}
 }
 export { Accounts }
