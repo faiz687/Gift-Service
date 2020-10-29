@@ -65,15 +65,23 @@ secureRouter.post('/SingleEvent/:id', async ctx => {
 	if(ctx.hbs.authorised !== true) return ctx.redirect(`/login?msg=you need to log'
 	in&referrer=/Events/SingleEvent/${ctx.params.id}`)
 	const account = await new Accounts(dbName)
+	const mail = await new Email()
 	await account.PledgeItem(ctx.params.id,ctx.session.UserId)
-	const EventData = await account.GetEventbyEventId(ctx.request.body.EventId)
-	const EventItems = await account.GetItemsbyEventId(ctx.request.body.EventId)
-	for (const i = 0; i < EventItems.length; i++) {
-		const ItemPledged = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
-		if (ItemPledged) {
+	const EventOwnerInfo = await account.GetEventOwnerInfo(ctx.request.body.EventId)
+	mail.SendPledgeMailToOwner(ctx.params.id)
+	
+	
+	
+	
+	
+	let EventData = await account.GetEventbyEventId(c)
+	let EventItems = await account.GetItemsbyEventId(ctx.request.body.EventId)
+	for (var i = 0; i < EventItems.length; i++) {
+		let ItemPledged  = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
+		if (ItemPledged){
 			EventItems[i].ItemPledged = ItemPledged
 		}
-	}
+	} 								
 	ctx.hbs.EventData = EventData
 	ctx.hbs.ItemData = EventItems
 	await ctx.render('SingleEvent',ctx.hbs)
