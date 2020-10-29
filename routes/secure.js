@@ -62,7 +62,7 @@ secureRouter.get('/SingleEvent/:id', async ctx => {
 })
 
 secureRouter.post('/SingleEvent/:id', async ctx => {
-	if(ctx.hbs.authorised !== true) return ctx.redirect(`/login?msg=you need to log'
+	if (ctx.hbs.authorised !== true) return ctx.redirect(`/login?msg=you need to log'
 	in&referrer=/Events/SingleEvent/${ctx.params.id}`)
 	const account = await new Accounts(dbName)
 	const mail = await new Email()
