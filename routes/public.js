@@ -1,11 +1,11 @@
 import Router from 'koa-router'
 import bodyParser from 'koa-body'
-import session from 'koa-session'
 
 const publicRouter = new Router()
 publicRouter.use(bodyParser({multipart: true}))
 
 import { Accounts } from '../modules/accounts.js'
+import { Email } from '../modules/Email.js'
 const dbName = 'GiftListService.db'
 
 /**
@@ -17,24 +17,20 @@ const dbName = 'GiftListService.db'
 publicRouter.get('/', async ctx => {
 	try {
 		const account = await new Accounts(dbName)
-		let AllEvents  = await account.GetAllEvents()
-		ctx.hbs.AllEvents =  AllEvents
+		const AllEvents = await account.GetAllEvents()
+		ctx.hbs.AllEvents = AllEvents
 		await ctx.render('index', ctx.hbs)
 	} catch(err) {
-		
 		await ctx.render('error', ctx.hbs)
 	}
 })
-
-
 /**
  * The user registration page.
  *
  * @name Register Page
  * @route {GET} /register
  */
- publicRouter.get('/register', async ctx => await ctx.render('register'))
-
+publicRouter.get('/register', async ctx => await ctx.render('register'))
 /**
  * The script to process new user registrations.
  *
@@ -87,7 +83,7 @@ publicRouter.post('/login', async ctx => {
 	ctx.hbs.body = ctx.request.body
 	try {
 		const body = ctx.request.body
-		let UserId = await account.login(body.user, body.pass)
+		const UserId = await account.login(body.user, body.pass)
 		ctx.session.UserId = UserId
 		ctx.session.authorised = true
 		const referrer = body.referrer || '/'

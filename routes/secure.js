@@ -1,5 +1,4 @@
 import Router from 'koa-router'
-import mime from 'mime-types'
 import fs from 'fs-extra'
 
 const secureRouter = new Router({ prefix: '/Events' })
@@ -23,66 +22,60 @@ secureRouter.get('/', async ctx => {
 
 secureRouter.post('/', async ctx => {
 	const account = await new Accounts(dbName)
-	try {		
-		const EventImageFile = ctx.request.files.EventImage
-		await fs.copy(EventImageFile.path, `EventImages/${EventImageFile.name}`)
-		let EventId = await account.RegisterEvent(ctx.request.body.EventTitle, ctx.request.body.EventsDescription, ctx.request.body.EventDate , ctx.session.UserId , EventImageFile.name)
-		if (typeof ctx.request.body.ItemName === "string"){
-			await account.AddItem( ctx.request.body.ItemName, ctx.request.body.ItemPrice, ctx.request.body.ItemLink , EventId)
+	try {
+		await fs.copy(ctx.request.files.EventImage.path, `EventImages/${ctx.request.files.EventImage.name}`)
+		const EventId = await account.RegisterEvent(ctx.request.body.EventTitle,ctx.request.body.EventsDescription,
+	  ctx.request.body.EventDate , ctx.session.UserId , ctx.request.files.EventImage.name)
+		if (typeof ctx.request.body.ItemName === 'string') {
+			await account.AddItem( ctx.request.body.ItemName, ctx.request.body.ItemPrice,
+			 ctx.request.body.ItemLink , EventId)
+		} else {
+			for (const index = 0; index < ctx.request.body.ItemName.length; index++) {
+				await account.AddItem( ctx.request.body.ItemName[index]
+				 ,ctx.request.body.ItemPrice[index], ctx.request.body.ItemLink[index] , EventId)
+			}
 		}
-		else{
-			for (var index = 0; index < ctx.request.body.ItemName.length; index++) {
-				await account.AddItem( ctx.request.body.ItemName[index], ctx.request.body.ItemPrice[index], ctx.request.body.ItemLink[index] , EventId)			
-			}	
-		}
-		ctx.hbs.msg = 
-	  ctx.redirect('/');
-	}
-	catch(err) {
+		ctx.redirect('/')
+	} catch(err) {
 		ctx.hbs.msg = err.message
 		ctx.hbs.body = ctx.request.body
-		console.log(ctx.hbs)
 		await ctx.render('register', ctx.hbs)
 	}
 })
 
 secureRouter.get('/SingleEvent/:id', async ctx => {
-	if(ctx.hbs.authorised !== true) return ctx.redirect('/login?msg=you need to log in&referrer=/Events/SingleEvent/'+ctx.params.id)
-  const account = await new Accounts(dbName)
-	let EventData = await account.GetEventbyEventId(ctx.params.id)
-	let EventItems = await account.GetItemsbyEventId(ctx.params.id)
-	for (var i = 0; i < EventItems.length; i++) {
-		let ItemPledged  = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
-		if (ItemPledged){
+	if(ctx.hbs.authorised !== true) {
+		return ctx.redirect(`/login?msg=you need to log in&referrer=/Events/SingleEvent/${ctx.params.id}`)
+	}
+	const account = await new Accounts(dbName)
+	const EventData = await account.GetEventbyEventId(ctx.params.id)
+	const EventItems = await account.GetItemsbyEventId(ctx.params.id)
+	for (let i = 0; i < EventItems.length; i++) {
+		const ItemPledged = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
+		if (ItemPledged) {
 			EventItems[i].ItemPledged = ItemPledged
 		}
-	} 								
+	}
 	ctx.hbs.EventData = EventData
 	ctx.hbs.ItemData = EventItems
 	await ctx.render('SingleEvent',ctx.hbs)
 })
 
-secureRouter.post('/SingleEvent/:id', async ctx => {	
-	if(ctx.hbs.authorised !== true) return ctx.redirect('/login?msg=you need to log in&referrer=/Events/SingleEvent/'+ctx.params.id)
+secureRouter.post('/SingleEvent/:id', async ctx => {
+	if(ctx.hbs.authorised !== true) return ctx.redirect(`/login?msg=you need to log'
+	in&referrer=/Events/SingleEvent/${ctx.params.id}`)
 	const account = await new Accounts(dbName)
-	const mail = await new Email()
-	console.log(mail)
-	
-// 	await account.PledgeItem(ctx.params.id,ctx.session.UserId)
-// 	let EventData = await account.GetEventbyEventId(ctx.request.body.EventId)
-// 	let EventItems = await account.GetItemsbyEventId(ctx.request.body.EventId)
-// 	for (var i = 0; i < EventItems.length; i++) {
-// 		let ItemPledged  = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
-// 		if (ItemPledged){
-// 			EventItems[i].ItemPledged = ItemPledged
-// 		}
-// 	} 								
-// 	ctx.hbs.EventData = EventData
-// 	ctx.hbs.ItemData = EventItems
-// 	await ctx.render('SingleEvent',ctx.hbs)
+	await account.PledgeItem(ctx.params.id,ctx.session.UserId)
+	const EventData = await account.GetEventbyEventId(ctx.request.body.EventId)
+	const EventItems = await account.GetItemsbyEventId(ctx.request.body.EventId)
+	for (const i = 0; i < EventItems.length; i++) {
+		const ItemPledged = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
+		if (ItemPledged) {
+			EventItems[i].ItemPledged = ItemPledged
+		}
+	}
+	ctx.hbs.EventData = EventData
+	ctx.hbs.ItemData = EventItems
+	await ctx.render('SingleEvent',ctx.hbs)
 })
-
-
-
-
 export { secureRouter }

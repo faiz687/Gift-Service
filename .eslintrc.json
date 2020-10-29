@@ -65,7 +65,7 @@
 		"yoda": "error"
 	},
 	"overrides": [{
-		"files": [ "test-*.js" ],
+		"files": [ "test-*.js"  ],
 		"rules": {
 			"global-require": "off",
 			"max-lines-per-function": "off",
