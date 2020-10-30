@@ -33,8 +33,11 @@
                      <label class="SingleEventlabel">Gift : {{this.ItemName}}</label>
                      <label class="SingleEventlabel">Gift Price : {{this.ItemPrice}}</label>
                      <a style="Display:block" href="{{this.ItemLink}}">Gift Link</a>
-                     {{#if ItemPledged}}
-                     <label style="color:green;" class="SingleEventlabel">This gift has been pledged by <span>{{this.ItemPledged.UserName}}</span></label>
+                     {{#if this.ItemPledged}}
+                     <label style="color:green;" class="SingleEventlabel">This gift has been pledged by <span>{{this.ItemPledged.UserName}}</span></label>										  
+                     {{else}}
+                     {{#if this.AwaitingConfimation}}
+                     <p> awaiting confirmation from owner</p>
                      {{else}}
                      <div style="margin:10px 0px ">
                         <label for="PLedgeGift">PLedge Gift</label>
@@ -44,6 +47,7 @@
                            <input type="hidden" name="EventId" value="{{this.EventId}}"/>
                         </form>
                      </div>
+                     {{/if}}  
                      {{/if}}                   	
                   </div>
                   {{/each}}

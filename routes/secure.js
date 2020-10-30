@@ -43,7 +43,7 @@ secureRouter.post('/', async ctx => {
 	}
 })
 
-secureRouter.get('/SingleEvent/:id', async ctx => {
+secureRouter.get('/SingleEvent/:id', async ctx => {	
 	if(ctx.hbs.authorised !== true) {
 		return ctx.redirect(`/login?msg=you need to log in&referrer=/Events/SingleEvent/${ctx.params.id}`)
 	}
@@ -51,9 +51,18 @@ secureRouter.get('/SingleEvent/:id', async ctx => {
 	const EventData = await account.GetEventbyEventId(ctx.params.id)
 	const EventItems = await account.GetItemsbyEventId(ctx.params.id)
 	for (let i = 0; i < EventItems.length; i++) {
-		const ItemPledged = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
+		const ItemPledged = await account.ItemPledgedbyItemId(EventItems[i].ItemId)		
 		if (ItemPledged) {
-			EventItems[i].ItemPledged = ItemPledged
+				EventItems[i].ItemPledged = ItemPledged
+			}
+	}
+  const EventOwnerInfo = await account.GetEventOwnerInfo(ctx.params.id)
+	if (ctx.session.UserId == EventOwnerInfo.UserId) {
+		for (let i = 0; i < EventItems.length; i++) {
+			const ItemPledged = await account.IsItemAwatingConfirmation(EventItems[i].ItemId)
+			if (ItemPledged) {
+				EventItems[i].AwaitingConfimation = true
+			}
 		}
 	}
 	ctx.hbs.EventData = EventData
@@ -66,11 +75,13 @@ secureRouter.post('/SingleEvent/:id', async ctx => {
 	in&referrer=/Events/SingleEvent/${ctx.params.id}`)
 	const account = await new Accounts(dbName)
 	const mail = await new Email()
-	await account.PledgeItem(ctx.params.id,ctx.session.UserId)
+	await account.PledgeItem(ctx.params.id,ctx.session.UserId,0)
 	const EventOwnerInfo = await account.GetEventOwnerInfo(ctx.request.body.EventId)
-	mail.SendPledgeMailToOwner(ctx.params.id)
-	let EventData = await account.GetEventbyEventId(c)
+	const ItemInfo = await account.GetItemInfoByItemId(ctx.params.id)
+	mail.SendPledgeMailToOwner(ItemInfo,EventOwnerInfo)
+	let EventData = await account.GetEventbyEventId(ctx.request.body.EventId)
 	let EventItems = await account.GetItemsbyEventId(ctx.request.body.EventId)
+	
 	for (var i = 0; i < EventItems.length; i++) {
 		let ItemPledged  = await account.ItemPledgedbyItemId(EventItems[i].ItemId)
 		if (ItemPledged){

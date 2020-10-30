@@ -7,7 +7,6 @@ publicRouter.use(bodyParser({multipart: true}))
 import { Accounts } from '../modules/accounts.js'
 import { Email } from '../modules/Email.js'
 const dbName = 'GiftListService.db'
-
 /**
  * The secure home page.
  *
@@ -46,7 +45,6 @@ publicRouter.post('/register', async ctx => {
 	} catch(err) {
 		ctx.hbs.msg = err.message
 		ctx.hbs.body = ctx.request.body
-		console.log(ctx.hbs)
 		await ctx.render('register', ctx.hbs)
 	} finally {
 		account.close()
@@ -87,7 +85,6 @@ publicRouter.post('/login', async ctx => {
 		ctx.session.UserId = UserId
 		ctx.session.authorised = true
 		const referrer = body.referrer || '/'
-		console.log(body.referrer)
 		return ctx.redirect(`${referrer}?msg=you are now logged in here...`)
 	} catch(err) {
 		ctx.hbs.msg = err.message

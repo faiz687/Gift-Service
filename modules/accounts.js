@@ -93,27 +93,47 @@ class Accounts {
 		return await this.db.all(sql)
 	}
 	async ItemPledgedbyItemId(ItemId) {
-		const sql = `select ItemId,UsersTbl.UserId,username from PledgeTbl 
-    INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}';`
+		const sql = `select ItemId,UsersTbl.UserId,username,PledgeConfirmed from PledgeTbl 
+    INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}' and PledgeConfirmed = 1;`
 		const record = await this.db.get(sql)
 		if (record === undefined) return null
 		return record
-	}
-	async PledgeItem(ItemId,UserId) {
+	}	
+	async PledgeItem(ItemId,UserId,PledgeStatus) {
 		Array.from(arguments).forEach( val => {
 			if(val.length === 0) throw new Error('missing field')
 		})
-		const sql = `INSERT INTO PledgeTbl (itemid,userid) VALUES (${ItemId}, ${UserId});`
+		const sql = `INSERT INTO PledgeTbl (itemid,userid,PledgeConfirmed) VALUES (${ItemId}, ${UserId} , ${PledgeStatus});`
 		await this.db.run(sql)
 		return true
 	}
-		async GetEventOwnerInfo(EventId) {
+	async GetItemInfoByItemId(ItemId) {
+		const sql = `	select itemid , itemname , itemprice , itemlink  from ItemsTbl  where itemid =  '${ItemId}';`
+		return await this.db.get(sql)
+	}
+	async GetEventOwnerInfo(EventId) {
 		Array.from(arguments).forEach( val => {
 			if(val.length === 0) throw new Error('missing field')
 		})
-    const sql = `select UsersTbl.userid , username , useremail from UsersTbl INNER JOIN EventsTbl
+    const sql = `select UsersTbl.userid , username , useremail , eventid from UsersTbl INNER JOIN EventsTbl
                  on EventsTbl.userid = UsersTbl.userid where eventid = ${EventId} ;`		
 		return await this.db.get(sql)
+	}	
+	async IsItemAwatingConfirmation(ItemId) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+    const sql = `select ItemId,UsersTbl.UserId,username,PledgeConfirmed from PledgeTbl 
+    INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}' and PledgeConfirmed = 0;`	
+		return await this.db.get(sql)
 	}
+	
+	
+	
+	
+	
+	
+	
+
 }
 export { Accounts }
