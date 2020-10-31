@@ -5,7 +5,6 @@ const publicRouter = new Router()
 publicRouter.use(bodyParser({multipart: true}))
 
 import { Accounts } from '../modules/accounts.js'
-import { Email } from '../modules/Email.js'
 const dbName = 'GiftListService.db'
 /**
  * The secure home page.

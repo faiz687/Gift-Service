@@ -341,6 +341,14 @@ label {
 		border: 2px solid white !important;	
 }
 
+.ConfirmFormPledge{
+	text-align:center
+}
 
-
-
+.ConfirmFormPledge p {
+    color: #202b24;
+    font-size: large;
+    font-family: Verdana,sans-serif;
+    margin: 5px 0px;
+    padding: 10px;
+}

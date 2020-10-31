@@ -33,11 +33,8 @@
                      <label class="SingleEventlabel">Gift : {{this.ItemName}}</label>
                      <label class="SingleEventlabel">Gift Price : {{this.ItemPrice}}</label>
                      <a style="Display:block" href="{{this.ItemLink}}">Gift Link</a>
-                     {{#if this.ItemPledged}}
+                     {{#if this.ItemPledged}}																										
                      <label style="color:green;" class="SingleEventlabel">This gift has been pledged by <span>{{this.ItemPledged.UserName}}</span></label>										  
-                     {{else}}
-                     {{#if this.AwaitingConfimation}}
-                     <p> awaiting confirmation from owner</p>
                      {{else}}
                      <div style="margin:10px 0px ">
                         <label for="PLedgeGift">PLedge Gift</label>
@@ -47,8 +44,15 @@
                            <input type="hidden" name="EventId" value="{{this.EventId}}"/>
                         </form>
                      </div>
-                     {{/if}}  
-                     {{/if}}                   	
+                     {{/if}}
+                     {{#if this.ItemPledgedconfirm}}	
+                     <form  method="post" enctype="multipart/form-data" action="/Events/SingleEvent/PledgeConfirm/{{this.ItemId}}" class="ConfirmFormPledge">
+                        <p>A Pledge Has been made for your gift click below to confirm and send thank you message to donor</p>
+                        <input class="PledgeFormInput PledgeSubmitButton" type="submit" value="Confirm pledge"/>  
+                        <input type="hidden" name="EventId" value="{{this.EventId}}"/>
+                        <input  type="hidden" name="UserId" value="{{this.ItemPledgedconfirm.UserId}}"/>
+                     </form>
+                     {{/if}}
                   </div>
                   {{/each}}
                </div>

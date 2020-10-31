@@ -98,12 +98,21 @@ class Accounts {
 		const record = await this.db.get(sql)
 		if (record === undefined) return null
 		return record
-	}	
+	}
 	async PledgeItem(ItemId,UserId,PledgeStatus) {
 		Array.from(arguments).forEach( val => {
 			if(val.length === 0) throw new Error('missing field')
 		})
-		const sql = `INSERT INTO PledgeTbl (itemid,userid,PledgeConfirmed) VALUES (${ItemId}, ${UserId} , ${PledgeStatus});`
+		const sql = `INSERT INTO PledgeTbl (itemid,userid,PledgeConfirmed) 
+    VALUES (${ItemId}, ${UserId} , ${PledgeStatus});`
+		await this.db.run(sql)
+		return true
+	}
+	async ConfirmPledge(ItemId) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		const sql = `update pledgetbl set pledgeconfirmed = 1 where itemid = ${ItemId}`;
 		await this.db.run(sql)
 		return true
 	}
@@ -115,25 +124,25 @@ class Accounts {
 		Array.from(arguments).forEach( val => {
 			if(val.length === 0) throw new Error('missing field')
 		})
-    const sql = `select UsersTbl.userid , username , useremail , eventid from UsersTbl INNER JOIN EventsTbl
-                 on EventsTbl.userid = UsersTbl.userid where eventid = ${EventId} ;`		
+		const sql = `select UsersTbl.userid , username , useremail , eventid from UsersTbl INNER JOIN EventsTbl 
+    on EventsTbl.userid = UsersTbl.userid where eventid = ${EventId} ;`
 		return await this.db.get(sql)
-	}	
+	}
 	async IsItemAwatingConfirmation(ItemId) {
 		Array.from(arguments).forEach( val => {
 			if(val.length === 0) throw new Error('missing field')
 		})
-    const sql = `select ItemId,UsersTbl.UserId,username,PledgeConfirmed from PledgeTbl 
-    INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}' and PledgeConfirmed = 0;`	
+		const sql = `select ItemId,UsersTbl.UserId,username,PledgeConfirmed from PledgeTbl 
+    INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}' and PledgeConfirmed = 0;`
 		return await this.db.get(sql)
 	}
-	
-	
-	
-	
-	
-	
-	
+		async GetUserInfoByUserId(UserId) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		const sql = `select * from userstbl where userid = ${UserId};`
+		return await this.db.get(sql)
+	}
 
 }
 export { Accounts }
