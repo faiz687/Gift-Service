@@ -128,7 +128,7 @@ class Accounts {
     on EventsTbl.userid = UsersTbl.userid where eventid = ${EventId} ;`
 		return await this.db.get(sql)
 	}
-	async IsItemAwatingConfirmation(ItemId) {
+	async IsItemAwatingConfirmation(ItemId){
 		Array.from(arguments).forEach( val => {
 			if(val.length === 0) throw new Error('missing field')
 		})
