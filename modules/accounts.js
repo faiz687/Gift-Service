@@ -4,14 +4,22 @@ import sqlite from 'sqlite-async'
 const saltRounds = 10
 
 class Accounts {
-	constructor(dbName = 'GiftListService.db') {
+	constructor(dbName = ":memory:") {
 		return (async() => {
+			try{
 			this.db = await sqlite.open(dbName)
-			// we need this table to store the user accounts
-			const sql = 'CREATE TABLE IF NOT EXISTS UsersTbl\
-				(UserId INTEGER PRIMARY KEY AUTOINCREMENT, UserName TEXT, UserPassword TEXT, UserEmail TEXT);'
+			let sql = `CREATE TABLE IF NOT EXISTS UsersTbl
+        (UserId INTEGER PRIMARY KEY AUTOINCREMENT, UserName TEXT, UserPassword TEXT, UserEmail TEXT);`	
 			await this.db.run(sql)
+			sql = `CREATE TABLE IF NOT EXISTS EventsTbl (EventId INTEGER PRIMARY KEY AUTOINCREMENT, 
+		  EventTitle TEXT, EventsDescription TEXT, EventDate TEXT , EventImage TEXT, UserId INTEGER);`
+      await this.db.run(sql)
+				
+			} catch (err){
+				console.log(err)	
+			}			
  			return this
+			
 		})()
 	}
 	/**
@@ -51,7 +59,6 @@ class Accounts {
 		if(valid === false) throw new Error(`invalid password for account "${username}"`)
 		return record.UserId
 	}
-
 	async close() {
 		await this.db.close()
 	}

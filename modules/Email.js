@@ -1,7 +1,5 @@
 import nodemailer from 'nodemailer'
 
-
-
 class Email {
 	constructor() {
 		this.transporter = nodemailer.createTransport({
@@ -62,12 +60,7 @@ class Email {
 				console.log(`Email sent: ${info.response}`)
 			}
 		})
-	}
-	
-	
-	
-	
- 		
+	}	
 }
 export { Email }
 
