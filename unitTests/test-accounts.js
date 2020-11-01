@@ -197,7 +197,7 @@ test('REGISTER Event: errror if blank image path ', async test => {
 test('Insert Gift : Insert Gift for an Event with all valid Enteries', async test => {
 	test.plan(1)
 	const account = await new Accounts()
-	const AddItem = await account.AddItem("Iphone 11","£439","https://www.amazon.co.uk/s?k=iphone&i=electronics&ref=nb_sb_noss_2",1)
+	const AddItem = await  account.AddItem("Iphone 11","£439","https://www.amazon.co.uk/s?k=iphone&i=electronics&ref=nb_sb_noss_2",1)
 	test.is(AddItem, true, 'unable to Add item')
 	account.close()
 })
