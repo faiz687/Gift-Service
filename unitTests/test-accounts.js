@@ -4,7 +4,7 @@ import { Accounts } from '../modules/accounts.js'
 
 test('REGISTER : register and log in with a valid account', async test => {
 	test.plan(1)
-	const account = await new Accounts() // no database specified so runs in-memory
+	const account = await new  Accounts() // no database specified so runs in-memory
 	const register = await account.register('doej', 'password', 'doej@gmail.com')
 	test.is(register, true, 'unable to register')
 	account.close()
