@@ -14,7 +14,12 @@ class Accounts {
 			sql = `CREATE TABLE IF NOT EXISTS EventsTbl (EventId INTEGER PRIMARY KEY AUTOINCREMENT, 
 		  EventTitle TEXT, EventsDescription TEXT, EventDate TEXT , EventImage TEXT, UserId INTEGER);`
       await this.db.run(sql)
-				
+			sql = `CREATE TABLE IF NOT EXISTS Itemstbl (ItemId INTEGER PRIMARY KEY AUTOINCREMENT, 
+			ItemName TEXT, ItemPrice TEXT, ItemLink TEXT , EventId INTEGER);`
+      await this.db.run(sql)
+			sql = `CREATE TABLE IF NOT EXISTS PledgeTbl (PledgeId INTEGER PRIMARY KEY AUTOINCREMENT, 
+			UserId INTEGER, ItemId INTEGER, PledgeConfirmed bool);`
+      await this.db.run(sql)
 			} catch (err){
 				console.log(err)	
 			}			
@@ -91,15 +96,18 @@ class Accounts {
 		return await this.db.all(sql)
 	}
 	async GetEventbyEventId(EventId) {
+		if (isNaN(EventId)) throw new Error('EventId should be a number')
 		const sql = `select EventId , EventTitle  , EventsDescription , strftime( ' %d-%m-%Y ', EventDate) as 
     EventDate,EventImage  FROM EventsTbl WHERE EventId ='${EventId}';`
 		return await this.db.get(sql)
 	}
 	async GetItemsbyEventId(EventId) {
+		if (isNaN(EventId)) throw new Error('EventId should be a number')
 		const sql = `select itemid,itemname,itemprice,EventId,itemlink from ItemsTbl where EventId = '${EventId}';`
 		return await this.db.all(sql)
 	}
 	async ItemPledgedbyItemId(ItemId) {
+		if (isNaN(ItemId)) throw new Error('ItemId should be a number')
 		const sql = `select ItemId,UsersTbl.UserId,username,PledgeConfirmed from PledgeTbl 
     INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}' and PledgeConfirmed = 1;`
 		const record = await this.db.get(sql)
