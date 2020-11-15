@@ -5,8 +5,8 @@
       <title>Home Page</title>
       <meta name="description" content="form to add new books">
       <meta name="author" content="Mark Tyers">
-		  <script src="https://kit.fontawesome.com/1dca77ecd5.js"></script>
-		  <script src="{{host}}/JavaScript.js"></script>
+      <script src="https://kit.fontawesome.com/1dca77ecd5.js"></script>
+      <script src="{{host}}/JavaScript.js"></script>
       <link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
    </head>
    <body>
@@ -37,17 +37,17 @@
                   <input type="file" name="EventImage" required>		
                </p>
                <section  class="EventItemsSection">
-								 <div class="EventItemsDiv">
-									 <label style="font-size: x-large;margin-bottom: 10px;">Add Items for Event</label>
-								 </div>								 
+                  <div class="EventItemsDiv">
+                     <label style="font-size: x-large;margin-bottom: 10px;">Add Items for Event</label>
+                  </div>
                   <div class="IndividualItemDiv">
                      <input type="text" name="ItemName"  placeholder="Enter Item Name..." required/>
-										 <input type="text" name="ItemPrice"  placeholder="Enter Item Price..." required />
+                     <input type="text" name="ItemPrice"  placeholder="Enter Item Price..." required />
                      <input type="text" name="ItemLink"  placeholder="Enter Item Link..." required/>
-										 <div class=AddAndRemoveButtonDiv>
-										  <button type="button" onclick="AddAnotherAnswerChoice(this)" class="AddAndRemoveButton"><i class="fas fa-plus-circle"></i></button>
-                     <button type="button" onclick="RemoveAnswerChoice(this)" class="AddAndRemoveButton"><i class="fas fa-minus"></i></button>	 
-										</div>
+                     <div class=AddAndRemoveButtonDiv>
+                        <button type="button" onclick="AddAnotherAnswerChoice(this)" class="AddAndRemoveButton"><i class="fas fa-plus-circle"></i></button>
+                        <button type="button" onclick="RemoveAnswerChoice(this)" class="AddAndRemoveButton"><i class="fas fa-minus"></i></button>	 
+                     </div>
                   </div>
                </section>
                <p><input type="submit" value="Create event"></p>
