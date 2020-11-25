@@ -21,6 +21,15 @@
 			PLedgeForm.style.display = 'none'
 		}
 	}
+	function ShowMessageBox() {
+		const x = document.getElementById('MyMessageBox')
+		if (x.style.display === 'none') {
+			x.style.display = 'block'
+		} else {
+			x.style.display = 'none'
+		}
+	}
+ 	window.ShowMessageBox = ShowMessageBox
 	window.ShowHideInput = ShowHideInput
 	window.RemoveAnswerChoice = RemoveAnswerChoice
 	window.AddAnotherAnswerChoice = AddAnotherAnswerChoice

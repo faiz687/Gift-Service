@@ -1,63 +1,71 @@
-<!doctype html><!doctype html>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="utf-8">
-      <title>Single Event Page</title>
-      <meta name="description" content="form to add new books">
-      <meta name="author" content="Mark Tyers">
-      <script src="https://kit.fontawesome.com/1dca77ecd5.js"></script>
-      <script src="{{host}}/JavaScript.js"></script>
-      <link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
-   </head>
-   <body>
-      <header>
-         <h1>Single Events Page</h1>
-         <a href="/logout">Log out</a>
-      </header>
-      {{#if msg}}
-      <p class="msg">{{msg}}</p>
-      {{/if}}
-      <main>
-         <section class="AllEventsSection">
-            <section class="EventsSectionWrapper">
-               <div class="SingleEvent">								 
-                  <label class="SingleEventlabel" style="font-size: xx-large;">{{EventData.EventTitle}}</label>
-                  <label class="SingleEventlabel" style="margin:20px 0px;">{{EventData.EventsDescription}}</label>
-                  <label class="SingleEventlabel" >{{EventData.EventDate}}</label>
-                  <img style="width: 40em;margin:15px 0px;" src="/{{EventData.EventImage}}">									  
-               </div>
-               <div class="SingleEvent" >
-                  <p>Gifts</p>
-                  {{#each ItemData}}
-                  <div class="ItemSectionWrapper" style="text-align: initial;">
-                     <label class="SingleEventlabel">Gift : {{this.ItemName}}</label>
-                     <label class="SingleEventlabel">Gift Price : {{this.ItemPrice}}</label>
-                     <a style="Display:block" href="{{this.ItemLink}}">Gift Link</a>
-                     {{#if this.ItemPledged}}																										
-                     <label style="color:green;" class="SingleEventlabel">This gift has been pledged by <span>{{this.ItemPledged.UserName}}</span></label>										  
-                     {{else}}
-                     <div style="margin:10px 0px ">
-                        <label for="PLedgeGift">PLedge Gift</label>
-                        <input style="margin-left:5px ;" type="checkbox" name="PLedgeGift" onclick="ShowHideInput(this)">	
-                        <form  method="post" enctype="multipart/form-data" action="/Events/SingleEvent/{{this.ItemId}}" style="display:none ;">
-                           <input style="margin-top:10px ;" class="PledgeFormInput PledgeSubmitButton" type="submit" value="Pledge Gift">
-                           <input type="hidden" name="EventId" value="{{this.EventId}}"/>
-                        </form>
-                     </div>
-                     {{/if}}
-                     {{#if this.ItemPledgedconfirm}}	
-                     <form  method="post" enctype="multipart/form-data" action="/Events/SingleEvent/PledgeConfirm/{{this.ItemId}}" class="ConfirmFormPledge">
-                        <p>A Pledge Has been made for your gift click below to confirm and send thank you message to donor</p>
-                        <input class="PledgeFormInput PledgeSubmitButton" type="submit" value="Confirm pledge"/>  
-                        <input type="hidden" name="EventId" value="{{this.EventId}}"/>
-                        <input  type="hidden" name="UserId" value="{{this.ItemPledgedconfirm.UserId}}"/>
-                     </form>
-                     {{/if}}
-                  </div>
-                  {{/each}}
-               </div>
+    <head>
+        <meta charset="utf-8" />
+        <title>Single Event Page</title>
+        <meta name="description" content="form to add new books" />
+        <meta name="author" content="Mark Tyers" />
+        <script src="https://kit.fontawesome.com/1dca77ecd5.js"></script>
+        <script src="{{host}}/JavaScript.js"></script>
+        <link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
+    </head>
+    <body>
+        <header>
+            <h1>Single Events Page</h1>
+            <a href="/logout">Log out</a>
+        </header>
+        {{#if msg}}
+        <p class="msg">{{msg}}</p>
+        {{/if}}
+        <main>
+            <section class="AllEventsSection">
+                <section class="EventsSectionWrapper">
+                    <div class="SingleEvent">
+                        <label class="SingleEventlabel" style="font-size: xx-large;">{{EventData.EventTitle}}</label>
+                        <label class="SingleEventlabel" style="margin: 20px 0px;">{{EventData.EventsDescription}}</label>
+                        <label class="SingleEventlabel">{{EventData.EventDate}}</label>
+                        <img style="width: 40em; margin: 15px 0px;" src="/{{EventData.EventImage}}" />
+                    </div>
+                    <div class="SingleEvent">
+                        <p>Gifts</p>
+                        {{#each ItemData}}
+                        <div class="ItemSectionWrapper" style="text-align: initial;">
+                            <label class="SingleEventlabel">Gift : {{this.ItemName}}</label>
+                            <label class="SingleEventlabel">Gift Price : {{this.ItemPrice}}</label>
+                            <a style="display: block;" href="{{this.ItemLink}}">Gift Link</a>
+                            {{#if this.ItemPledged}}
+                            <label style="color: green;" class="SingleEventlabel">This gift has been pledged by <span>{{this.ItemPledged.UserName}}</span></label>
+                            {{else}}
+                            <div style="margin: 10px 0px;">
+                                <label for="PLedgeGift">PLedge Gift</label>
+                                <input style="margin-left: 5px;" type="checkbox" name="PLedgeGift" onclick="ShowHideInput(this)" />
+                                <form method="post" enctype="multipart/form-data" action="/Events/SingleEvent/{{this.ItemId}}" style="display: none;">
+                                    <input style="margin-top: 10px;" class="PledgeFormInput PledgeSubmitButton" type="submit" value="Pledge Gift" />
+                                    <input type="hidden" name="EventId" value="{{this.EventId}}" />
+                                </form>
+                            </div>
+                            {{/if}} {{#if this.ItemPledgedconfirm}}
+                            <form method="post" enctype="multipart/form-data" action="/Events/SingleEvent/PledgeConfirm/{{this.ItemId}}" class="ConfirmFormPledge">
+                                <p>A Pledge Has been made for your gift click below to confirm and send thank you message to donor</p>
+                                <input class="PledgeFormInput PledgeSubmitButton" type="submit" value="Confirm pledge" />
+                                <input type="hidden" name="EventId" value="{{this.EventId}}" />
+                                <input type="hidden" name="UserId" value="{{this.ItemPledgedconfirm.UserId}}" />
+                            </form>
+                            {{/if}}
+                            <div class="Messagearea">
+                                <input class="MessageOwnerButton" type="button" value="Message Owner" onclick="ShowMessageBox()" />
+                                <div id="MyMessageBox" style="display: none;">
+                                    <form action="/action_page.php">
+                                        <textarea style="font-size: larger;" name="question" rows="3" cols="30"></textarea>
+                                        <input class="MessageOwnerSubmitButton" type="submit" value="Send message" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </section>
             </section>
-         </section>
-      </main>
-   </body>
+        </main>
+    </body>
 </html>
