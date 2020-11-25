@@ -44,7 +44,8 @@
                                     <input type="hidden" name="EventId" value="{{this.EventId}}" />
                                 </form>
                             </div>
-                            {{/if}} {{#if this.ItemPledgedconfirm}}
+                            {{/if}} 
+                            {{#if this.ItemPledgedconfirm}}
                             <form method="post" enctype="multipart/form-data" action="/Events/SingleEvent/PledgeConfirm/{{this.ItemId}}" class="ConfirmFormPledge">
                                 <p>A Pledge Has been made for your gift click below to confirm and send thank you message to donor</p>
                                 <input class="PledgeFormInput PledgeSubmitButton" type="submit" value="Confirm pledge" />
@@ -56,6 +57,7 @@
                                 <input class="MessageOwnerButton" type="button" value="Message Owner" onclick="ShowMessageBox()" />
                                 <div id="MyMessageBox" style="display: none;">
                                     <form action="/action_page.php">
+                                        
                                         <textarea style="font-size: larger;" name="question" rows="3" cols="30"></textarea>
                                         <input class="MessageOwnerSubmitButton" type="submit" value="Send message" />
                                     </form>

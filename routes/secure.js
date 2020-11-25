@@ -88,12 +88,14 @@ secureRouter.post('/', async ctx => {
  * @route {GET} /Events/SingleEvent/:id
  */
 secureRouter.get('/SingleEvent/:id', async ctx => {
-	if(ctx.hbs.authorised !== true) {
+	if(ctx.hbs.authorised !== true ) {
 		return ctx.redirect(`/login?msg=you need to log in&referrer=/Events/SingleEvent/${ctx.params.id}`)
 	}
 	const account = await new EventsAccounts(dbName)
 	const EventData = await account.GetEventbyEventId(ctx.params.id)
 	const EventItems = await account.GetItemsbyEventId(ctx.params.id)
+  console.log("this is event data")
+  console.log(EventData)
 	ctx.hbs.EventData = EventData
 	ctx.hbs.ItemData = await CheckIfItemPledged(EventItems,ctx)
 	await ctx.render('SingleEvent',ctx.hbs)
