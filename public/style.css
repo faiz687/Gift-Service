@@ -352,3 +352,19 @@ label {
     margin: 5px 0px;
     padding: 10px;
 }
+.MessageOwnerButton{
+    width: 10em;
+    height: 1.7em;
+    border-radius: 5px;  
+}
+
+
+.MessageOwnerSubmitButton{  
+    border: transparent !important;
+    font-size: large !important;
+    margin-top: 15px;
+    background-color: #297f4c !important;
+    border-radius: 10px;  
+}
+
+
