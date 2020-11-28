@@ -328,6 +328,14 @@ label {
     border-radius: 9px;	
 }
 
+.ItemSectionWrapperMessage{
+    background: #d9d9d9;
+    padding: 5px;
+    border: 5px solid #9c9280;
+    margin: 10px 0px;
+    border-radius: 9px;
+}
+
 .PledgeFormInput {
 	  font-size: larger !important;
     padding: 10px !important;

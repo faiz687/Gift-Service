@@ -1,62 +1,25 @@
 import sqlite from 'sqlite-async'
+import bcrypt from 'bcrypt-promise'
+import { CreateUserTbl , CreateEventsTbl , CreateItemstbl , CreatePledgeTbl
+	,CreateQuestionItemTbl , Register} from './ExtendedAccounts.js'
 
-class EventsAccounts {
-
-	async CreateUserTbl() {
-		try {
-			const sql = `CREATE TABLE IF NOT EXISTS UsersTbl
-        (UserId INTEGER PRIMARY KEY AUTOINCREMENT, UserName TEXT, UserPassword TEXT, UserEmail TEXT);`
-			await this.db.run(sql)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-
-	async CreateEventsTbl() {
-		try {
-			const	sql = `CREATE TABLE IF NOT EXISTS EventsTbl (EventId INTEGER PRIMARY KEY AUTOINCREMENT, 
-        EventTitle TEXT, EventsDescription TEXT, EventDate TEXT , EventImage TEXT, UserId INTEGER);`
-			await this.db.run(sql)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-
-	async CreateItemstbl() {
-		try {
-			const	sql = `CREATE TABLE IF NOT EXISTS Itemstbl (ItemId INTEGER PRIMARY KEY AUTOINCREMENT,
-          ItemName TEXT, ItemPrice TEXT, ItemLink TEXT , EventId INTEGER);`
-			await this.db.run(sql)
-		}catch (err) {
-			console.log(err)
-		}
-	}
-
-	async CreatePledgeTbl() {
-		try {
-			const	sql = `CREATE TABLE IF NOT EXISTS PledgeTbl (PledgeId INTEGER PRIMARY KEY AUTOINCREMENT, 
-        UserId INTEGER, ItemId INTEGER, PledgeConfirmed bool);`
-			await this.db.run(sql)
-		} catch (err) {
-			console.log(err)
-		}
-	}
+class Accounts {
 
 	constructor(dbName = ':memory:') {
 		return (async() => {
 			try{
 				this.db = await sqlite.open(dbName)
-				await this.CreateEventsTbl()
-				await this.CreateItemstbl()
-				await this.CreatePledgeTbl()
-				await this.CreateUserTbl()
+				await CreateEventsTbl(this)
+				await CreateItemstbl(this)
+				await CreatePledgeTbl(this)
+				await CreateUserTbl(this)
+				await CreateQuestionItemTbl(this)
 			} catch (err) {
 				console.log(err)
 			}
  			return this
 		})()
 	}
-
 	async close() {
 		await this.db.close()
 	}
@@ -91,7 +54,7 @@ class EventsAccounts {
 	async GetEventbyEventId(EventId) {
 		if (isNaN(EventId)) throw new Error('EventId should be a number')
 		const sql = `select EventId , EventTitle  , EventsDescription , strftime( ' %d-%m-%Y ', EventDate) as 
-    EventDate,EventImage  FROM EventsTbl WHERE EventId ='${EventId}';`
+    EventDate , EventImage , UserId FROM EventsTbl WHERE EventId ='${EventId}';`
 		return await this.db.get(sql)
 	}
 	async GetItemsbyEventId(EventId) {
@@ -136,5 +99,60 @@ class EventsAccounts {
     INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}' and PledgeConfirmed = 0;`
 		return await this.db.get(sql)
 	}
+	async InsertQuestion(Question,ItemId) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+	  const sql = `INSERT INTO ItemQuestionsTbl (Question,ItemId) VALUES ('${Question}','${ItemId}');`
+		await this.db.run(sql)
+		return true
+	}
+	async GetAllQuestionByItemId(ItemId) {
+		if (isNaN(ItemId)) throw new Error('ItemId should be a number')
+	  const sql = `select * from ItemQuestionsTbl where ItemId = ${ItemId};`
+		return await this.db.all(sql)
+	}
+  	/**
+	 * registers a new user
+	 * @param {String} user the chosen username
+	 * @param {String} pass the chosen password
+	 * @returns {Boolean} returns true if the new user has been added
+	 */
+	async register(user, pass, email) {
+		return await Register(this, user, pass, email)
+	}
+	/**
+	 * checks to see if a set of login credentials are valid
+	 * @param {String} username the username to check
+	 * @param {String} password the password to check
+	 * @returns {Boolean} returns true if credentials are valid
+	 */
+	async login(username, password) {
+		let sql = `SELECT count(UserId) AS count FROM UsersTbl WHERE UserName="${username}";`
+		const records = await this.db.get(sql)
+		if(!records.count) throw new Error(`username "${username}" not found`)
+		sql = `SELECT UserPassword , UserId  FROM UsersTbl WHERE UserName = "${username}";`
+		const record = await this.db.get(sql)
+		const valid = await bcrypt.compare(password, record.UserPassword)
+		if(valid === false) throw new Error(`invalid password for account "${username}"`)
+		return record.UserId
+	}
+
+	async GetEventOwnerInfo(EventId) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		const sql = `select UsersTbl.userid , username , useremail , eventid from UsersTbl INNER JOIN EventsTbl 
+    on EventsTbl.userid = UsersTbl.userid where eventid = ${EventId} ;`
+		return await this.db.get(sql)
+	}
+	async GetUserInfoByUserId(UserId) {
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		const sql = `select * from userstbl where userid = ${UserId};`
+		return await this.db.get(sql)
+	}
+
 }
-export { EventsAccounts }
+export { Accounts }

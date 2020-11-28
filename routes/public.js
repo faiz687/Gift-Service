@@ -4,8 +4,7 @@ import bodyParser from 'koa-body'
 const publicRouter = new Router()
 publicRouter.use(bodyParser({multipart: true}))
 
-import { EventsAccounts } from '../modules/EventsAccounts.js'
-import { UserAccounts } from '../modules/UserAccounts.js'
+import { Accounts } from '../modules/Accounts.js'
 const dbName = 'GiftListService.db'
 /**
  * The secure home page.
@@ -15,11 +14,12 @@ const dbName = 'GiftListService.db'
  */
 publicRouter.get('/', async ctx => {
 	try {
-		const account = await new EventsAccounts(dbName)
+		const account = await new Accounts(dbName)
 		const AllEvents = await account.GetAllEvents()
 		ctx.hbs.AllEvents = AllEvents
 		await ctx.render('index', ctx.hbs)
 	} catch(err) {
+    console.log(err)
 		await ctx.render('error', ctx.hbs)
 	}
 })
@@ -37,7 +37,7 @@ publicRouter.get('/register', async ctx => await ctx.render('register'))
  * @route {POST} /register
  */
 publicRouter.post('/register', async ctx => {
-	const account = await new UserAccounts(dbName)
+	const account = await new Accounts(dbName)
 	try {
 		await account.register(ctx.request.body.user, ctx.request.body.pass, ctx.request.body.email)
 		ctx.redirect(`/login?msg=new user "${ctx.request.body.user}" added, you need to log in`)
@@ -65,7 +65,7 @@ publicRouter.get('/login', async ctx => {
  * @route {POST} /login
  */
 publicRouter.post('/login', async ctx => {
-	const account = await new UserAccounts(dbName)
+	const account = await new Accounts(dbName)
 	ctx.hbs.body = ctx.request.body
 	try {
 		const body = ctx.request.body
@@ -102,7 +102,7 @@ publicRouter.get('/validate/:user/:token', async ctx => {
 			console.log(ctx.params)
 			const milliseconds = 1000
 			const now = Math.floor(Date.now() / milliseconds)
-			const account = await new UserAccounts(dbName)
+			const account = await new Accounts(dbName)
 			await account.checkToken(ctx.params.user, ctx.params.token, now)
 			ctx.hbs.msg = `account "${ctx.params.user}" has been validated`
 			await ctx.render('login', ctx.hbs)
