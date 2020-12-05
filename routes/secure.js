@@ -2,8 +2,9 @@ import Router from 'koa-router'
 import fs from 'fs-extra'
 import { Email } from '../modules/Email.js'
 import { Accounts } from '../modules/Accounts.js'
-const secureRouter = new Router({ prefix: '/Events' })
 
+
+const secureRouter = new Router({ prefix: '/Events' })
 const dbName = 'GiftListService.db'
 /**
  * The Page to Regiter An Event.
@@ -75,18 +76,16 @@ const CheckIfItemHasQuestions = async(Items) => {
 secureRouter.post('/', async ctx => {
 	const account = await new Accounts(dbName)
 	try {
-    console.log(ctx.request.body.files)
-    console.log(ctx.request.body.EventImage)
-// 		await fs.copy(ctx.request.files.EventImage.path, `EventImages/${ctx.request.files.EventImage.name}`)
-// 		const BodyInfo = ctx.request.body
-// 		const EventId = await account.RegisterEvent(BodyInfo.EventTitle,BodyInfo.EventsDescription,
-// 	  BodyInfo.EventDate , ctx.session.UserId , ctx.request.files.EventImage.name)
-// 		if (typeof ctx.request.body.ItemName === 'string') {
-// 			await account.AddItem( BodyInfo.ItemName, BodyInfo.ItemPrice,BodyInfo.ItemLink , EventId)
-// 		} else {
-// 			AddItemsToEvent(BodyInfo,EventId)
-// 		}
-// 		ctx.redirect('/')
+		await fs.copy(ctx.request.files.EventImage.path, `EventImages/${ctx.request.files.EventImage.name}`)
+		const BodyInfo = ctx.request.body
+		const EventId = await account.RegisterEvent(BodyInfo.EventTitle,BodyInfo.EventsDescription,
+	  BodyInfo.EventDate , ctx.session.UserId , ctx.request.files.EventImage.name)
+		if (typeof ctx.request.body.ItemName === 'string') {
+			await account.AddItem( BodyInfo.ItemName, BodyInfo.ItemPrice,BodyInfo.ItemLink , EventId)
+		} else {
+			AddItemsToEvent(BodyInfo,EventId)
+		}
+		ctx.redirect('/')
 	} catch(err) {
 		ctx.hbs.msg = err.message
 		ctx.hbs.body = ctx.request.body

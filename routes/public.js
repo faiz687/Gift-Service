@@ -1,9 +1,5 @@
 import Router from 'koa-router'
-import bodyParser from 'koa-body'
-
 const publicRouter = new Router()
-publicRouter.use(bodyParser({multipart: true}))
-
 import { Accounts } from '../modules/Accounts.js'
 const dbName = 'GiftListService.db'
 /**

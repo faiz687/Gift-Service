@@ -2,6 +2,7 @@ import Koa from 'koa'
 import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
+import bodyParser from 'koa-body'
 
 import { apiRouter } from './routes/routes.js'
 
@@ -12,6 +13,8 @@ app.keys = ['darkSecret']
 const defaultPort = 8080
 const port = process.env.PORT || defaultPort
 
+
+app.use(bodyParser({multipart:true}))
 app.use(serve('EventImages'))
 app.use(serve('public'))
 app.use(session(app))
