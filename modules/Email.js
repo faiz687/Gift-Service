@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 
 
-class Email {
+class Email  {
 	constructor() {
 		this.transporter = nodemailer.createTransport({
 			service: 'outlook',
