@@ -14,6 +14,7 @@ const dbName = 'GiftListService.db'
  */
 secureRouter.get('/', async ctx => {
 	try {
+    console.log("error")
 		if(ctx.hbs.authorised !== true) return ctx.redirect('/login?msg=you need to log in&referrer=/Event')
 		await ctx.render('Event', ctx.hbs)
 	} catch(err) {
