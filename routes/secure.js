@@ -1,3 +1,12 @@
+/**
+ * A module containing all the secured routes (endpoints).
+ * @module routes/secure
+ * @author Faizaan Chowdhary
+ * @requires koa-router
+ * @requires fs-extra
+ * @requires /modules/Email.js
+ * @requires /modules/Accounts.js
+ */
 import Router from 'koa-router'
 import fs from 'fs-extra'
 import { Email } from '../modules/Email.js'
@@ -7,9 +16,8 @@ import { Accounts } from '../modules/Accounts.js'
 const secureRouter = new Router({ prefix: '/Events' })
 const dbName = 'GiftListService.db'
 /**
- * The Page to Regiter An Event.
- *
- * @name Home Page
+ * The Route to get a specific event.
+ * @function
  * @route {GET} /Events
  */
 secureRouter.get('/', async ctx => {
@@ -39,7 +47,12 @@ const AddItemsToEvent = async(GiftList,EventId) => {
 		console.log(err)
 	}
 }
-
+/**
+ * fuction to check if an item has been pledged and add appropriate property to it.
+ * @param {object} EventItems - list of all Gifts user wants for event.
+ * @param {object} ctx - context middleware.
+ * @returns {object} EventItems -  returns list of all items if they have been pledged or not.
+ */
 const CheckIfItemPledged = async(EventItems,ctx) => {
 	const account = await new Accounts(dbName)
 	for (let i = 0; i < EventItems.length; i++) {
@@ -56,7 +69,11 @@ const CheckIfItemPledged = async(EventItems,ctx) => {
 		}
 	} return EventItems
 }
-
+/**
+ * fuction to check if an item has any questions.
+ * @param {object} Items - list of all Gifts user wants for event.
+ * @returns {object} Items - returns list of all items if they have any questions or not.
+ */
 const CheckIfItemHasQuestions = async(Items) => {
 	const account = await new Accounts(dbName)
 	for (let i = 0; i < Items.length; i++) {
@@ -68,10 +85,9 @@ const CheckIfItemHasQuestions = async(Items) => {
 	return Items
 }
 /**
- * The script to processa a new event registration.
- *
- * @name Event Register Script
- * @route {POST} /Events
+ * The Route to process a new event.
+ * @function
+ * @route {GET} /Events
  */
 secureRouter.post('/', async ctx => {
 	const account = await new Accounts(dbName)
@@ -93,9 +109,10 @@ secureRouter.post('/', async ctx => {
 	}
 })
 /**
- * The Specific Event page.
- * @name SingleEvent Page
- * @route {GET} /Events/SingleEvent/:id
+ * The Route to get an event by its id.
+ * @function
+ * @param {integer} id - the EventId of the Event to get.
+ * @route {GET} /SingleEvent/:id
  */
 secureRouter.get('/SingleEvent/:id', async ctx => {
 	if(ctx.hbs.authorised !== true ) {
@@ -110,10 +127,10 @@ secureRouter.get('/SingleEvent/:id', async ctx => {
 	await ctx.render('SingleEvent',ctx.hbs)
 })
 /**
- * The script to process a new pledge made for a gift.
- *
- * @name  Pledge Gift.
- * @route {POST} /Events/SingleEvent/:id
+ * The Route to pledge an item for an event.
+ * @function
+ * @param {integer} id - the EventId of the Event to get.
+ * @route {POST} /SingleEvent/:id
  */
 secureRouter.post('/SingleEvent/:id', async ctx => {
 	if (ctx.hbs.authorised !== true) return ctx.redirect(`/login?msg=you need to log'
@@ -127,8 +144,9 @@ secureRouter.post('/SingleEvent/:id', async ctx => {
 	await ctx.redirect(`/Events/SingleEvent/${ctx.request.body.EventId}`)
 })
 /**
- * The script to confirm a new pledge made for a gift.
+ * The Route to confirm pledge of an item by its ownerf.
  * @name Confirm Pledge Gift.
+ * @param {integer} id - the EventId of the Event to get.
  * @route {POST} /Events/SingleEvent/PledgeConfirm/:id
  */
 secureRouter.post('/SingleEvent/PledgeConfirm/:id', async ctx => {
@@ -145,7 +163,12 @@ secureRouter.post('/SingleEvent/PledgeConfirm/:id', async ctx => {
 		console.log(err)
 	}
 })
-
+/**
+ * The Route to message the owner regarding question about an item.
+ * @name Mesage Owner Route.
+ * @param {integer} id - the itemid of the item about the question.
+ * @route {POST} /SingleEvent/MessageOwner/:id
+ */
 secureRouter.post('/SingleEvent/MessageOwner/:id', async ctx => {
 	if(ctx.hbs.authorised !== true) {
 		return ctx.redirect(`/login?msg=you need to log in&referrer=/Events/SingleEvent/${ctx.params.id}`)
