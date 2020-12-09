@@ -1,8 +1,17 @@
+/**
+ * An Extended module to perform operations on the Database.
+ * @requires sqlite-async
+ * @requires bcrypt-promise
+ * @module modules/ExtendedAccounts
+ * @author Faizaan Chowdhary
+ */
 import bcrypt from 'bcrypt-promise'
 import sqlite from 'sqlite-async'
 const saltRounds = 10
-
-
+/**
+ * A fuction to create user table if it does not exist.
+ * @param {object} thisdb - instance of the database.
+ */
 const CreateUserTbl = async(thisdb) => {
 	try {
 		const sql = `CREATE TABLE IF NOT EXISTS UsersTbl
@@ -12,6 +21,10 @@ const CreateUserTbl = async(thisdb) => {
 		console.log(err)
 	}
 }
+/**
+ * A fuction to create events table if it does not exist.
+ * @param {object} thisdb - instance of the database.
+ */
 const CreateEventsTbl = 	async(thisdb) => {
 	try {
 		const	sql = `CREATE TABLE IF NOT EXISTS EventsTbl (EventId INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -21,6 +34,10 @@ const CreateEventsTbl = 	async(thisdb) => {
 		console.log(err)
 	}
 }
+/**
+ * A fuction to create items table if it does not exist.
+ * @param {object} thisdb - instance of the database.
+ */
 const	CreateItemstbl = async(thisdb) => {
 	try {
 		const	sql = `CREATE TABLE IF NOT EXISTS Itemstbl (ItemId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,6 +47,10 @@ const	CreateItemstbl = async(thisdb) => {
 		console.log(err)
 	}
 }
+/**
+ * A fuction to create a pledge table if it does not exist.
+ * @param {object} thisdb - instance of the database.
+ */
 const	CreatePledgeTbl = async(thisdb) => {
 	try {
 		const	sql = `CREATE TABLE IF NOT EXISTS PledgeTbl (PledgeId INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -39,6 +60,10 @@ const	CreatePledgeTbl = async(thisdb) => {
 		console.log(err)
 	}
 }
+/**
+ * A fuction to create questions table if it does not exist.
+ * @param {object} thisdb - instance of the database.
+ */
 const	CreateQuestionItemTbl = async(thisdb) => {
 	try {
 		const	sql = `CREATE TABLE IF NOT EXISTS ItemQuestionsTbl (QuestionId INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -48,8 +73,18 @@ const	CreateQuestionItemTbl = async(thisdb) => {
 		console.log(err)
 	}
 }
+/**
+ * A fuction to regiter the user.
+ * @param {object} thisdb - instance of the database.
+ * @param {list} ...args - The object containing all the user properties.
+ * @param {string} args[0] - The username of the user.
+ * @param {string} args[1] - The password of the user.
+ * @param {string} args[2] - The email of the user.
+ * @returns {boolean} returns true if user created
+ */
 const	Register = async(thisdb,...args) => {
-	Array.from(args).forEach( val => {
+  try {
+    Array.from(args).forEach( val => {
 		if(val.length === 0) throw new Error('missing field')
 	})
 	const user = args[0]
@@ -65,6 +100,10 @@ const	Register = async(thisdb,...args) => {
 	sql = `INSERT INTO UsersTbl(UserName, UserPassword, UserEmail) VALUES("${user}", "${pass}", "${email}")`
 	await thisdb.db.run(sql)
 	return true
+  } catch (error) {
+    throw error
+  }
+	
 }
 
 

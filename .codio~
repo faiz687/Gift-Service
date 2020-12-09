@@ -1,0 +1,20 @@
+{
+ //Configure your Run and Preview buttons here.
+
+//Run button configuration
+ "commands": {
+       "Node version": "node --version"
+  },
+{
+    "preview": {
+        "Live Site": "https://{{domain8080}}/{{index}}",
+        "Heroku": "https://{{domain5000}}/{{index}}"
+    }
+}
+ //Preview button configuration
+ "preview": {
+       "Live Site": "https://{{domain8080}}/{{index}}",
+       "Box URL": "http://{{domain3000}}/",
+       "Box URL SSL": "https://{{domain3000}}/"
+ }
+}

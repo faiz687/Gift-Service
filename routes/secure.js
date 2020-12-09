@@ -14,7 +14,6 @@ const dbName = 'GiftListService.db'
  */
 secureRouter.get('/', async ctx => {
 	try {
-    console.log("error")
 		if(ctx.hbs.authorised !== true) return ctx.redirect('/login?msg=you need to log in&referrer=/Event')
 		await ctx.render('Event', ctx.hbs)
 	} catch(err) {
@@ -123,7 +122,7 @@ secureRouter.post('/SingleEvent/:id', async ctx => {
 	const mail = await new Email()
 	await account.PledgeItem(ctx.params.id,ctx.session.UserId,0)
 	const EventOwnerInfo = await account.GetEventOwnerInfo(ctx.request.body.EventId)
-	const ItemInfo = await account.GetItemInfoByItemId(ctx.params.id)
+	const ItemInfo = await account.GetItemByItemId(ctx.params.id)
 	mail.SendPledgeMailToOwner(ItemInfo,EventOwnerInfo)
 	await ctx.redirect(`/Events/SingleEvent/${ctx.request.body.EventId}`)
 })
@@ -139,7 +138,7 @@ secureRouter.post('/SingleEvent/PledgeConfirm/:id', async ctx => {
 		const account = await new Accounts(dbName)
 		const mail = await new Email()
 		await account.ConfirmPledge(ctx.params.id)
-		const UserInfo = await account.GetUserInfoByUserId(ctx.request.body.UserId)
+		const UserInfo = await account.GetUserById(ctx.request.body.UserId)
 		mail.SendThankYouMailToDonor(UserInfo)
 		await ctx.redirect(`/Events/SingleEvent/${ctx.request.body.EventId}`)
 	} catch(err) {
