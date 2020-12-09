@@ -1,3 +1,9 @@
+/**
+ * @file Gift List Service API Documentation Server
+ * @author faizaan chowdhary
+ * @version v1
+ * @description This file initialises the Server and loads all the routers endpoints.
+ */
 import Koa from 'koa'
 import serve from 'koa-static'
 import views from 'koa-views'

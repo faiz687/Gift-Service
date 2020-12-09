@@ -83,27 +83,27 @@ const	CreateQuestionItemTbl = async(thisdb) => {
  * @returns {boolean} returns true if user created
  */
 const	Register = async(thisdb,...args) => {
-  try {
-    Array.from(args).forEach( val => {
-		if(val.length === 0) throw new Error('missing field')
-	})
-	const user = args[0]
-	let pass = args[1]
-	const email = args[2]
-	let sql = `SELECT COUNT(UserId) as records FROM UsersTbl WHERE UserName="${user}";`
-	const data = await thisdb.db.get(sql)
-	if(data.records !== 0) throw new Error(`username "${user}" already in use`)
-	sql = `SELECT COUNT(UserId) as records FROM UsersTbl WHERE UserEmail="${email}";`
-	const emails = await thisdb.db.get(sql)
-	if(emails.records !== 0) throw new Error(`email address "${email}" is already in use`)
-	pass = await bcrypt.hash(pass, saltRounds)
-	sql = `INSERT INTO UsersTbl(UserName, UserPassword, UserEmail) VALUES("${user}", "${pass}", "${email}")`
-	await thisdb.db.run(sql)
-	return true
-  } catch (error) {
-    throw error
-  }
-	
+	try {
+		Array.from(args).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		const user = args[0]
+		let pass = args[1]
+		const email = args[2]
+		let sql = `SELECT COUNT(UserId) as records FROM UsersTbl WHERE UserName="${user}";`
+		const data = await thisdb.db.get(sql)
+		if(data.records !== 0) throw new Error(`username "${user}" already in use`)
+		sql = `SELECT COUNT(UserId) as records FROM UsersTbl WHERE UserEmail="${email}";`
+		const emails = await thisdb.db.get(sql)
+		if(emails.records !== 0) throw new Error(`email address "${email}" is already in use`)
+		pass = await bcrypt.hash(pass, saltRounds)
+		sql = `INSERT INTO UsersTbl(UserName, UserPassword, UserEmail) VALUES("${user}", "${pass}", "${email}")`
+		await thisdb.db.run(sql)
+		return true
+	} catch (error) {
+		throw error
+	}
+
 }
 
 

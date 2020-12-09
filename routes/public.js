@@ -1,10 +1,16 @@
+/**
+ * A module containing all the open routes (endpoints).
+ * @module routes/public
+ * @author Faizaan Chowdhary
+ * @requires koa-router
+ * @requires /modules/Accounts.js
+ */
 import Router from 'koa-router'
 const publicRouter = new Router()
 import { Accounts } from '../modules/Accounts.js'
 const dbName = 'GiftListService.db'
 /**
- * The secure home page.
- *
+ * The Route to get all the events on the database .
  * @name Home Page
  * @route {GET} /
  */
@@ -20,15 +26,13 @@ publicRouter.get('/', async ctx => {
 	}
 })
 /**
- * The user registration page.
- *
+ * The Route to get the registration page.
  * @name Register Page
  * @route {GET} /register
  */
 publicRouter.get('/register', async ctx => await ctx.render('register'))
 /**
- * The script to process new user registrations.
- *
+ * The Route to register a user to the system.
  * @name Register Script
  * @route {POST} /register
  */
@@ -46,8 +50,7 @@ publicRouter.post('/register', async ctx => {
 	}
 })
 /**
- * The Login Page.
- *
+ * The Route to get the Login page.
  * @name Login Page
  * @route {GET} /
  */
@@ -55,8 +58,7 @@ publicRouter.get('/login', async ctx => {
 	await ctx.render('login', ctx.hbs)
 })
 /**
- * The script to process user Login Details.
- *
+ * The Route to to process user Login Details.
  * @name Login Page
  * @route {POST} /login
  */
@@ -78,8 +80,7 @@ publicRouter.post('/login', async ctx => {
 	}
 })
 /**
- * The script to Log user out.
- *
+ * The Route to Log user out of the system.
  * @name Logout Process
  * @route {GET} /logout
  */
@@ -87,9 +88,17 @@ publicRouter.get('/logout', async ctx => {
 	ctx.session.authorised = null
 	ctx.redirect('/?msg=you are now logged out')
 })
-
+/**
+ * The Route to validate user after register.
+ * @name PostRegister Process
+ * @route {GET} /postregister
+ */
 publicRouter.get('/postregister', async ctx => await ctx.render('validate'))
-
+/**
+ * The Route to validate user the user token
+ * @name Validation Process
+ * @route {GET} /validate/:user/:token
+ */
 publicRouter.get('/validate/:user/:token', async ctx => {
 	try {
 		console.log('VALIDATE')
