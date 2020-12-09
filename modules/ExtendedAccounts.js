@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt-promise'
 import sqlite from 'sqlite-async'
 const saltRounds = 10
+
+
 const CreateUserTbl = async(thisdb) => {
 	try {
 		const sql = `CREATE TABLE IF NOT EXISTS UsersTbl
@@ -50,10 +52,9 @@ const	Register = async(thisdb,...args) => {
 	Array.from(args).forEach( val => {
 		if(val.length === 0) throw new Error('missing field')
 	})
-  let user = args[0]
-  let pass = args[1]
-  let email = args[2]
-  console.log(user,pass,email)
+	const user = args[0]
+	let pass = args[1]
+	const email = args[2]
 	let sql = `SELECT COUNT(UserId) as records FROM UsersTbl WHERE UserName="${user}";`
 	const data = await thisdb.db.get(sql)
 	if(data.records !== 0) throw new Error(`username "${user}" already in use`)
@@ -62,7 +63,6 @@ const	Register = async(thisdb,...args) => {
 	if(emails.records !== 0) throw new Error(`email address "${email}" is already in use`)
 	pass = await bcrypt.hash(pass, saltRounds)
 	sql = `INSERT INTO UsersTbl(UserName, UserPassword, UserEmail) VALUES("${user}", "${pass}", "${email}")`
-  console.log("inserting")
 	await thisdb.db.run(sql)
 	return true
 }

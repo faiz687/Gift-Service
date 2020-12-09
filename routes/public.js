@@ -15,7 +15,7 @@ publicRouter.get('/', async ctx => {
 		ctx.hbs.AllEvents = AllEvents
 		await ctx.render('index', ctx.hbs)
 	} catch(err) {
-    console.log(err)
+		console.log(err)
 		await ctx.render('error', ctx.hbs)
 	}
 })

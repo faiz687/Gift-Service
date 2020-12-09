@@ -1,3 +1,10 @@
+/**
+ * A module to perform CRUD operations on the user table.
+ * @requires module:/helpers/database
+ * @requires module:bcrypt
+ * @module models/Users
+ * @author Faizaan Chowdhary
+ */
 import sqlite from 'sqlite-async'
 import bcrypt from 'bcrypt-promise'
 import { CreateUserTbl , CreateEventsTbl , CreateItemstbl , CreatePledgeTbl
@@ -112,12 +119,12 @@ class Accounts {
 	  const sql = `select * from ItemQuestionsTbl where ItemId = ${ItemId};`
 		return await this.db.all(sql)
 	}
-  	/**
-	 * registers a new user
-	 * @param {String} user the chosen username
-	 * @param {String} pass the chosen password
-	 * @returns {Boolean} returns true if the new user has been added
-	 */
+	/**
+   * registers a new user
+   * @param {String} user the chosen username
+   * @param {String} pass the chosen password
+   * @returns {Boolean} returns true if the new user has been added
+   */
 	async register(user, pass, email) {
 		return await Register(this, user, pass, email)
 	}
