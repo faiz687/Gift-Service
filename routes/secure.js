@@ -133,6 +133,7 @@ secureRouter.get('/SingleEvent/:id', async ctx => {
  * @route {POST} /SingleEvent/:id
  */
 secureRouter.post('/SingleEvent/:id', async ctx => {
+	console.log(ctx.params.id)
 	if (ctx.hbs.authorised !== true) return ctx.redirect(`/login?msg=you need to log'
 	in&referrer=/Events/SingleEvent/${ctx.params.id}`)
 	const account = await new Accounts(dbName)

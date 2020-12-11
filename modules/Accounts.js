@@ -1,13 +1,14 @@
 /**
  * A module to perform operations on the Database.
  * @requires sqlite-async
- * @requires bcrypt-promise
  * @module modules/Accounts
  * @author Faizaan Chowdhary
  */
 import sqlite from 'sqlite-async'
-import bcrypt from 'bcrypt-promise'
-import { CreateUserTbl , CreateEventsTbl , CreateItemstbl , CreatePledgeTbl ,CreateQuestionItemTbl , Register} from './ExtendedAccounts.js'
+import { CreateUserTbl , CreateEventsTbl , CreateItemstbl
+	, CreatePledgeTbl ,CreateQuestionItemTbl , InsertQuestionex
+	, Register , Login , RegisterEvent , GetEventOwnerInfoex ,
+	GetItemByItemIdex ,ItemPledgedbyItemIdex , GetUserByIdex} from './ExtendedAccounts.js'
 /** Class providing all functionality for database operations. */
 class Accounts {
 	/**
@@ -45,23 +46,12 @@ class Accounts {
 	 * @returns {integer}  EventId - returns event id if event created successfully.
 	 */
 	async RegisterEvent(EventTitle,EventsDescription,EventDate,UserId,EventImagePath ) {
-		try {
-      		Array.from(arguments).forEach( val => {
-
-				if(val.length === 0) throw new Error('missing field')
-			})
-			let sql = `SELECT count(EventTitle) AS count FROM EventsTbl WHERE EventTitle="${EventTitle}";`
-			const records = await this.db.get(sql)
-			if(records.count !== 0) throw new Error('Event Already Exists')
-			sql = `INSERT INTO EventsTbl (EventTitle , EventsDescription ,  EventDate , EventImage , UserId) 
-      VALUES ('${EventTitle}',	'${EventsDescription}' , '${EventDate}' ,  '${EventImagePath}'  , '${UserId}');`
-			await this.db.get(sql)
-			sql = 'select last_insert_rowid() AS EventId;'
-			const data = await this.db.get(sql)
-			return data.EventId
-		} catch (error) {
-			throw error
-		}
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		const eventdata = {_EventTitle: EventTitle , _EventsDescription: EventsDescription, _EventDate: EventDate,
+			_UserId: UserId,_EventImagePath: EventImagePath }
+		return await RegisterEvent(this, eventdata)
 	}
   	/**
 	 * Add item (gift) for an event.
@@ -73,7 +63,7 @@ class Accounts {
 	 */
 	async AddItem(ItemName,ItemPrice,ItemLink,EventId) {
 		try{
-      		Array.from(arguments).forEach( val => {
+			Array.from(arguments).forEach( val => {
 				if(val.length === 0) throw new Error('missing field')
 			})
 	  const sql = `INSERT INTO ItemsTbl (ItemName,ItemPrice,ItemLink,EventId) VALUES 
@@ -98,7 +88,6 @@ class Accounts {
 		} catch (error) {
 			throw error
 		}
-
 	}
   	/**
 	 * get the event by its id.
@@ -137,16 +126,7 @@ class Accounts {
 	 * @returns {data|null} returns list containing item if item pledged or null if otherwise.
 	 */
 	async ItemPledgedbyItemId(ItemId) {
-		try {
-      		if (isNaN(ItemId)) throw new Error('ItemId should be a number')
-			const sql = `select ItemId,UsersTbl.UserId,username,PledgeConfirmed from PledgeTbl 
-    INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}' and PledgeConfirmed = 1;`
-			const record = await this.db.get(sql)
-			if (record === undefined) return null
-			return record
-		} catch (error) {
-			throw error
-		}
+		return await ItemPledgedbyItemIdex(this, ItemId)
 	}
   	/**
 	 * pledge an item for an event.
@@ -176,16 +156,15 @@ class Accounts {
 	 */
 	async ConfirmPledge(ItemId) {
 		try {
-      		Array.from(arguments).forEach( val => {
-				if(val.length === 0) throw new Error('missing field')
-			})
+			if (!ItemId) throw new Error('Item-id undefined')
+			if(ItemId.length === 0) throw new Error('missing field')
+			if (isNaN(ItemId)) throw new Error('ItemId should be a number')
 			const sql = `update pledgetbl set pledgeconfirmed = 1 where itemid = ${ItemId}`
 			await this.db.run(sql)
 			return true
 		} catch (error) {
 			throw error
 		}
-
 	}
   	/**
 	 * get item by item id.
@@ -193,13 +172,7 @@ class Accounts {
 	 * @returns {data} returns list containing information for item.
 	 */
 	async GetItemByItemId(ItemId) {
-		try {
-      		const sql = `	select itemid , itemname , itemprice , itemlink  from ItemsTbl  where itemid =  '${ItemId}';`
-			return await this.db.get(sql)
-		} catch (error) {
-			throw error
-		}
-
+		return await GetItemByItemIdex(this, ItemId)
 	}
   	/**
 	 * checks to see if an item pledge status has been confirmed by the owner.
@@ -208,9 +181,8 @@ class Accounts {
 	 */
 	async IsItemAwatingConfirmation(ItemId) {
 		try {
-      		Array.from(arguments).forEach( val => {
-				if(val.length === 0) throw new Error('missing field')
-			})
+			if (!ItemId) throw new Error('Item-id undefined')
+			if (isNaN(ItemId)) throw new Error('ItemId should be a number')
 			const sql = `select ItemId,UsersTbl.UserId,username,PledgeConfirmed from PledgeTbl 
     INNER join UsersTbl on PledgeTbl.userid = UsersTbl.userid where ItemId = '${ItemId}' and PledgeConfirmed = 0;`
 			return await this.db.get(sql)
@@ -226,16 +198,11 @@ class Accounts {
 	 * @returns {Boolean} returns true if question inserted.
 	 */
 	async InsertQuestion(Question,ItemId) {
-		try {
-      		Array.from(arguments).forEach( val => {
-				if(val.length === 0) throw new Error('missing field')
-			})
-	  const sql = `INSERT INTO ItemQuestionsTbl (Question,ItemId) VALUES ('${Question}','${ItemId}');`
-			await this.db.run(sql)
-			return true
-		} catch (error) {
-			throw error
-		}
+		if (isNaN(ItemId)) throw new Error('ItemId should be a number')
+		Array.from(arguments).forEach( val => {
+			if(val.length === 0) throw new Error('missing field')
+		})
+		return await InsertQuestionex(this, Question , ItemId)
 	}
   	/**
 	 * get all the question regarding an item.
@@ -244,7 +211,7 @@ class Accounts {
 	 */
 	async GetAllQuestionByItemId(ItemId) {
 		try{
-      		if (isNaN(ItemId)) throw new Error('ItemId should be a number')
+			if (isNaN(ItemId)) throw new Error('ItemId should be a number')
 	  const sql = `select * from ItemQuestionsTbl where ItemId = ${ItemId};`
 			return await this.db.all(sql)
 		} catch (error) {
@@ -259,6 +226,7 @@ class Accounts {
    * @returns {Boolean} returns true if the new user has been added
    */
 	async register(user, pass, email) {
+		if (user.length === 0 || pass.length === 0 || email.length === 0 ) throw new Error('missing field')
 		return await Register(this, user, pass, email)
 	}
 	/**
@@ -268,32 +236,15 @@ class Accounts {
 	 * @returns {Boolean} returns true if credentials are valid
 	 */
 	async login(username, password) {
-		try{
-      		let sql = `SELECT count(UserId) AS count FROM UsersTbl WHERE UserName="${username}";`
-			const records = await this.db.get(sql)
-			if(!records.count) throw new Error(`username "${username}" not found`)
-			sql = `SELECT UserPassword , UserId  FROM UsersTbl WHERE UserName = "${username}";`
-			const record = await this.db.get(sql)
-			const valid = await bcrypt.compare(password, record.UserPassword)
-			if(valid === false) throw new Error(`invalid password for account "${username}"`)
-			return record.UserId
-		} catch (error) {
-			throw error
-		}
-
+		return await Login(this,username, password)
 	}
   	/**
-	 * gets owner information by event id.
+	 * gets user information by event id.
 	 * @param {integer} EventId - the id of the event.
 	 * @returns {data} returns list of information of owner who created the event.
 	 */
 	async GetEventOwnerInfo(EventId) {
-		Array.from(arguments).forEach( val => {
-			if(val.length === 0) throw new Error('missing field')
-		})
-		const sql = `select UsersTbl.userid , username , useremail , eventid from UsersTbl INNER JOIN EventsTbl 
-    on EventsTbl.userid = UsersTbl.userid where eventid = ${EventId} ;`
-		return await this.db.get(sql)
+		return await GetEventOwnerInfoex(this,EventId)
 	}
   	/**
 	 * get user by id.
@@ -301,15 +252,7 @@ class Accounts {
 	 * @returns {data} returns list of information containing about user.
 	 */
 	async GetUserById(UserId) {
-		try{
-			Array.from(arguments).forEach( val => {
-				if(val.length === 0) throw new Error('missing field')
-			})
-			const sql = `select * from userstbl where userid = ${UserId};`
-			return await this.db.get(sql)
-		} catch (error) {
-			throw error
-		}
+		return await GetUserByIdex(this,UserId)
 	}
 
 }

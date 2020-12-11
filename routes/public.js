@@ -19,7 +19,7 @@ publicRouter.get('/', async ctx => {
 		const account = await new Accounts(dbName)
 		const AllEvents = await account.GetAllEvents()
 		ctx.hbs.AllEvents = AllEvents
-		await ctx.render('index', ctx.hbs)
+		await ctx.render('Home', ctx.hbs)
 	} catch(err) {
 		console.log(err)
 		await ctx.render('error', ctx.hbs)
@@ -116,5 +116,6 @@ publicRouter.get('/validate/:user/:token', async ctx => {
 		await ctx.render('login', ctx.hbs)
 	}
 })
+
 
 export { publicRouter }
