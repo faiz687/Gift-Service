@@ -9,7 +9,7 @@ import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
 import bodyParser from 'koa-body'
-import mount from 'koa-mount'
+
 
 import { apiRouter } from './routes/routes.js'
 
@@ -24,7 +24,6 @@ const port = process.env.PORT || defaultPort
 app.use(bodyParser({multipart: true}))
 app.use(serve('EventImages'))
 app.use(serve('public'))
-app.use(serve('./docs/jsdoc'))
 app.use(session(app))
 app.use(views('views',{ extension: 'handlebars' }, {map: { handlebars: 'handlebars' }}))
 

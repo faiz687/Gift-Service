@@ -33,7 +33,7 @@ class Email {
 		const mailOptions = {
 			from: 'chowdhaf@uni.coventry.ac.uk',
 			to: 'faizaan_555@hotmail.com',
-			subject: 'Sending Email using Node.js',
+			subject: 'Pledge Made : Kindly confirm',
 			html: `<p> hello user ${EventOwnerInfo.UserName} </p>
              <p> A pledge has been made for your Gift listed : ${ItemInfo.ItemName} for ${ItemInfo.ItemPrice} </p>
 			       <p> Please click on the link below to go the Event Page </p>
@@ -59,7 +59,7 @@ class Email {
 		const mailOptions = {
 			from: 'chowdhaf@uni.coventry.ac.uk',
 			to: 'faizaan_555@hotmail.com',
-			subject: 'Sending Email using Node.js',
+			subject: 'Pledge Confirmed : Thankyou',
 			html: `<p> hello user ${UserInfo.UserName} </p>
              <p> Thank you for your pledge i have now confirmed this from my end</p>`
 		}

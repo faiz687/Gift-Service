@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
    <meta charset="utf-8" />
    <title>Single Event Page</title>
@@ -30,21 +32,21 @@
                <div class="ItemSectionWrapper" style="text-align: initial;">
                   <label class="SingleEventlabel">Gift : {{this.ItemName}}</label>
                   <label class="SingleEventlabel">Gift Price : {{this.ItemPrice}}</label>
-                  <a style="display: block;" href="{{this.ItemLink}}">Gift Link</a>
+                  <a style="display: block;" target="_blank" href="{{this.ItemLink}}">Gift Link</a>
                   {{#if this.ItemPledged}}
                   <label style="color: green;" class="SingleEventlabel">This gift has been pledged by <span>{{this.ItemPledged.UserName}}</span></label>
                   {{else}}
                   <div style="margin: 10px 0px;">
                      <label for="PLedgeGift">PLedge Gift</label>
                      <input style="margin-left: 5px;" type="checkbox" name="PLedgeGift" onclick="ShowHideInput(this)" />
-                     <form method="post" enctype="multipart/form-data" action="/Events/SingleEvent/{{this.ItemId}}" style="display: none;">
+                     <form method="post" enctype="multipart/form-data" action="/Events/SingleEvent/{{this.ItemId}}" style="display:none;">
                         <input style="margin-top: 10px;" class="PledgeFormInput PledgeSubmitButton" type="submit" value="Pledge Gift" />
                         <input type="hidden" name="EventId" value="{{this.EventId}}" />
                      </form>
                   </div>
                   {{/if}} 
                   {{#if this.ItemPledgedconfirm}}
-                  <form method="post" enctype="multipart/form-data" action="/Events/SingleEvent/PledgeConfirm/{{this.ItemId}}" class="ConfirmFormPledge">
+                  <form method="post" enctype="multipart/form-data" action="/Events/SingleEvent/PledgeConfirm/{{this.ItemId}}" class="ConfirmFormPledge" >
                      <p>A Pledge Has been made for your gift click below to confirm and send thank you message to donor</p>
                      <input class="PledgeFormInput PledgeSubmitButton" type="submit" value="Confirm pledge" />
                      <input type="hidden" name="EventId" value="{{this.EventId}}" />
@@ -69,6 +71,7 @@
                         <input class="MessageOwnerSubmitButton" type="submit" value="Send message" />
                         <input type="hidden" name="EventId" value="{{../EventData.EventId}}" />
                         <input type="hidden" name="UserId" value="{{../EventData.UserId}}" />
+                          </form>
                      </div>
                   </div>
                </div>
