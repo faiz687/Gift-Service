@@ -8,7 +8,7 @@
 import Router from 'koa-router'
 const publicRouter = new Router()
 import { Accounts } from '../modules/Accounts.js'
-const dbName =  'GiftListService.db'
+const dbName = 'GiftListService.db'
 /**
  * The Route to get all the events on the database .
  * @name Home Page

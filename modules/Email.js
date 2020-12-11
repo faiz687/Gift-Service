@@ -14,7 +14,7 @@ class Email {
 			service: 'outlook',
 			auth: {
 				 user: 'chowdhaf@uni.coventry.ac.uk',
-				pass: 'Placements123-'
+				pass: 'Placements123-' // password has been changed after video recording
 			}
 		})
 		return this
