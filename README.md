@@ -2,7 +2,7 @@
 It is customary for events such as weddings or birthday for those celeberating to make a list of the gifts they would like. Guests can then pick from the list to make sure they are buying something that is useful. 
 
 ## Pages created :-
-1.Home Page.
+1.Home Page...
 2.Registration Page.
 3.Registration Page for the event. 
 4.Specific event Page.
