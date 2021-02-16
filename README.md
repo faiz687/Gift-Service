@@ -1,5 +1,5 @@
 # Gift List Service
-It is customary for events such as weddings or birthday for those celeberating to make a list of the gifts they would like. Guests can then pick from the list to make sure they are buying something that is useful. 
+It is customary for events such as weddings or birthday for those celeberating to make a list of the gifts they would like. Guests can then pick from the list to make sure they are buying something that is useful.the software allows a user (host) to post a list of gifts they would like to receive for their event ( wedding, birthday etc.) from users (Guests). There are countless instances when a host receives the same gift or a gift which they are not interested in, to solve this problem I developed a front-end system (website) which allowed users (host) to create an event, upload details of each gift they would like to receive, this could be then viewed by the users (guests) and they could pledge for a gift by adding their name next to it, which finally send a confirmation email to the host and guest.    
 
 ## Pages created :-
 1.Home Page.   
